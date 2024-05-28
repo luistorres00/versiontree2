@@ -2,6 +2,9 @@ const mongoose = require("mongoose");
 
 // Definir modelo Mongoose para os dados
 const dadoSchema = new mongoose.Schema({
+  corrida:{
+    type: Number,
+  },
   camera:{
     type: String,
   },

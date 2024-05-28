@@ -5,7 +5,6 @@ exports.getData = async (req, res) => {
   try {
     // Buscar todos os dados no banco de dados
     const dados = await Dados.find();
-    console.log(dados);
     // Retornar os dados encontrados como resposta
     res.json(dados);
   } catch (error) {

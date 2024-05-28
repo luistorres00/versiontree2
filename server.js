@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 
 //login
-const authRoutes = require("../wfRacing/routes/authRoutes");
+const authRoutes = require("../versiontree/routes/authRoutes");
 
 const routes = require("./routes/routing");
 const {
@@ -36,6 +36,9 @@ app.use(bodyParser.json());
 app.post("/addData", addController.addData);
 app.get("/getData", getController.getData);
 app.put("/updateData/:id", putController.putData);
+
+//public access
+app.use(express.static('public'));
 
 //login
 app.use("/auth", authRoutes);
