@@ -1,4 +1,4 @@
-http://192.168.1.148:3000/auth/register
+http://192.168.1.148:16082/auth/register
 
 no body -> raw - json
 

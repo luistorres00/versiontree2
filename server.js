@@ -3,9 +3,9 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const https = require('https');
-const fs = require('fs');
-const path = require('path');
+const https = require("https");
+const fs = require("fs");
+const path = require("path");
 
 //variaveis de config e rotas
 const authRoutes = require("../versiontree/routes/authRoutes");
@@ -18,10 +18,10 @@ const {
 
 //init express, port & http
 const app = express();
-const pwaPath = path.join(__dirname, 'public', 'pwa'); // Caminho ajustado
+const pwaPath = path.join(__dirname, "public", "pwa"); // Caminho ajustado
 
-const keyPath = path.join(pwaPath, '192.168.1.148-key.pem');
-const certPath = path.join(pwaPath, '192.168.1.148.pem');
+const keyPath = path.join(pwaPath, "192.168.1.148-key.pem");
+const certPath = path.join(pwaPath, "192.168.1.148.pem");
 
 // Verificação de Existência de Arquivos
 if (!fs.existsSync(keyPath)) {
@@ -35,10 +35,10 @@ if (!fs.existsSync(certPath)) {
 }
 
 const options = {
-  key: fs.readFileSync(path.resolve(pwaPath, '192.168.1.148-key.pem')),
-  cert: fs.readFileSync(path.resolve(pwaPath, '192.168.1.148.pem')),
+  key: fs.readFileSync(path.resolve(pwaPath, "192.168.1.148-key.pem")),
+  cert: fs.readFileSync(path.resolve(pwaPath, "192.168.1.148.pem")),
 };
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 16082;
 
 //iniciar cors
 app.use(
@@ -62,7 +62,7 @@ app.get("/getData", getController.getData);
 app.put("/updateData/:id", putController.putData);
 
 //public access
-app.use(express.static('public'));
+app.use(express.static("public"));
 
 //login
 app.use("/auth", authRoutes);
