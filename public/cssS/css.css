@@ -347,7 +347,7 @@ z-index: 10001;
 }
 
 #editlg{
-  content:url(images/lapis_1.png);
+  content:url(/images/pen.png);
   display: block;
   margin-left: auto;
   margin-right:auto;
@@ -356,7 +356,7 @@ z-index: 10001;
 }
 
 #editlg:hover {
-  content:url(images/lapis.png); /* Adiciona a animação ao passar o mouse */
+  content:url(/images/pen.png); /* Adiciona a animação ao passar o mouse */
 }
 
 @keyframes spin {
@@ -602,14 +602,14 @@ tr.priority-set td{
 }
 
 #filtroImg{
-  content:url(images/pesquisa.png);
+  content:url(/images/pesquisa.png);
   width:7%;
   cursor: pointer;
   vertical-align:bottom;
 }
 
 #filtroImg:hover{
-  content:url(images/pesquisaGif.png);
+  content:url(/images/pesquisaGif.png);
 }
 
 #filtroImgtd{

@@ -244,7 +244,7 @@
           item.nfa ? "checked" : ""
         } disabled></td>
         <td contenteditable="true">${item.obs}</td>
-        <td id="tdlg"><img src="images/pen.png" alt="Editar" id="editlg" onclick="abrirDetalhes('${
+        <td id="tdlg"><img src="/images/pen.png" alt="Editar" id="editlg" onclick="abrirDetalhes('${
           item._id
         }')"></td>
         <td id="positionButton" class="hidden"><button class="buttaoUpDown" id="buttonUp${

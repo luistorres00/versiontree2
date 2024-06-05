@@ -13,6 +13,7 @@ if ("serviceWorker" in navigator) {
       });
   });
 }
+
 document.addEventListener("keypress", handlekeypress);
 
 document.addEventListener("DOMContentLoaded", function () {
