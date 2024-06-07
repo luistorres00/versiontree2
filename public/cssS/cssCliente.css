@@ -484,7 +484,7 @@ tr.nfa-true td {
 
 tr.post-start td {
   background-color: #18cc00 ; /* Cor de fundo vermelha */
-  color: white; /* Cor do texto branco */
+  color: rgb(0, 0, 0); /* Cor do texto branco */
 }
 tr.post-slow td {
   background-color: #d6ff07 ; /* Cor de fundo vermelha */
@@ -498,7 +498,7 @@ tr.post-redflag td{
 tr.priority-set td{
   background-color: #e29032; /* Cor de fundo vermelha */
   color: white; /* Cor do texto branco */
-  animation: blinks 1s  infinite;
+  animation: blinks 2s  infinite;
   transition-duration: 1s infinite; 
   
 }
@@ -508,13 +508,14 @@ tr.priority-set td{
 @keyframes blinks {
   0% {
     
-    background-color:#ffa600; /* Define o ponto final da cor */
-    color:white;
+    background-color:#f0f0f0; /* Define o ponto final da cor */
+    color:black;
+
   }
   
   100% {
-    background-color:#f0f0f0; /* Define o ponto inicial da cor */
-    color: gray;
+    background-color: orangered; /* Define o ponto inicial da cor */
+    color: black;
   }
 }
 
