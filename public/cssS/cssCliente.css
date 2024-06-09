@@ -488,7 +488,7 @@ tr.post-start td {
 }
 tr.post-slow td {
   background-color: #d6ff07 ; /* Cor de fundo vermelha */
-  /* color: white;  *//* Cor do texto branco */
+  color: black;  *//* Cor do texto branco */
 }
 tr.post-redflag td{
   background-color: #E30613;
