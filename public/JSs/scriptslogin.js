@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
     logoutButton.addEventListener("click", function () {
       // Fazer solicitação para logout
       console.log("1");
-      fetch("http://192.168.51.53:16082/auth/logout", {
+      fetch("http://192.168.1.87:16082/auth/logout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -107,7 +107,7 @@ function login() {
   };
 
   // Enviar solicitação HTTP para validar o login
-  fetch("http://192.168.51.53:16082/auth/login", {
+  fetch("http://192.168.1.87:16082/auth/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
