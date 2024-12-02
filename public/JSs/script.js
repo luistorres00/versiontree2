@@ -19,7 +19,7 @@ setInterval(updateClock, 1000);
 let campoPesquisa = false;
 
 //Declarado URL's
-const url = "http://192.168.1.87:16082/";
+const url = "http://192.168.51.53:16082/";
 
 //-------------------------------------------------------DOC LISTENERS--------------------------------------------------------
 
@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const userData = JSON.parse(responseData);
   if (!responseData) {
     // Se a variável responseData não existir, redirecione o usuário para index.html
-    window.location.href = "http://192.168.1.87:5500/index.html";
+    window.location.href = "http://192.168.51.53:5500/index.html";
   }
 
   localStorage.setItem("usertype", userData.usertype);
@@ -339,7 +339,7 @@ document.addEventListener("DOMContentLoaded", function () {
     logoutButton.addEventListener("click", function () {
       // Fazer solicitação para logout
       console.log("1");
-      fetch("http://192.168.1.87:16082/auth/logout", {
+      fetch("http://192.168.51.53:16082/auth/logout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -376,7 +376,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function carregarDados() {
   // Definir o IP/URL para onde enviar os dados
-  const url = "http://192.168.1.87:16082/getData";
+  const url = "http://192.168.51.53:16082/getData";
 
   fetch(url)
     .then((response) => response.json())
@@ -404,7 +404,7 @@ function inputRace() {
   if (rname != null) {
     document.getElementById("header").innerHTML = rname;
     // Enviar o nome da corrida para o backend
-    fetch("http://192.168.1.87:16082/addRace", {
+    fetch("http://192.168.51.53:16082/addRace", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -428,7 +428,7 @@ function inputRace() {
 
 //Muda o nome da corrida para a ultima da tabela
 function updateHeaderWithLastRaceText() {
-  fetch("http://192.168.1.87:16082/getLRace")
+  fetch("http://192.168.51.53:16082/getLRace")
     .then((response) => {
       if (!response.ok) {
         throw new Error("Erro ao obter o texto da última corrida");
@@ -600,7 +600,7 @@ function getData() {
     return Promise.resolve(null); // Retorna uma promessa resolvida com null se algum popup estiver aberto
   }
 
-  const url = "http://192.168.1.87:16082/getData";
+  const url = "http://192.168.51.53:16082/getData";
 
   return fetch(url)
     .then((response) => response.json())
@@ -831,7 +831,7 @@ function enviarJson() {
   console.log(localStorageData);
 
   // Definir o IP/URL para onde enviar os dados
-  const url = "http://192.168.1.87:16082/addData";
+  const url = "http://192.168.51.53:16082/addData";
 
   // Verificar se existem dados no localStorage
   if (localStorageData) {
@@ -935,7 +935,7 @@ function envUpJson() {
     // Define o ID do documento a ser atualizado (obtido do localStorage)
     const id = updatedData._id;
     // Definir o IP/URL para onde enviar os dados
-    const url = `http://192.168.1.87:16082/updateData/${id}`;
+    const url = `http://192.168.51.53:16082/updateData/${id}`;
     // Envia os dados atualizados para o servidor
     fetch(url, {
       method: "PUT",
@@ -970,7 +970,7 @@ function deleteLinha() {
   // Verifica se o ID está disponível nos detalhes
   if (detalhes && detalhes._id) {
     // Faz uma solicitação DELETE para excluir a linha com o ID especificado
-    fetch(`http://192.168.1.87:16082/dropData/${detalhes._id}`, {
+    fetch(`http://192.168.51.53:16082/dropData/${detalhes._id}`, {
       method: "DELETE",
     })
       .then((response) => {
@@ -998,177 +998,154 @@ function atualizarTabela(data) {
 
   // Limpa apenas as linhas de dados da tabela, mantendo o cabeçalho
   while (tabela.rows.length > 1) {
-    tabela.deleteRow(1);
+      tabela.deleteRow(1);
   }
 
   // Adiciona linhas à tabela com os dados recebidos
-  var counter = 1;
   data.forEach((item) => {
-    const novaLinha = document.createElement("tr");
+      const novaLinha = document.createElement("tr");
 
-    // Id
+      // Aplica as classes de cor com base no valor de "curva"
+      if (item.curva === "Start") {
+          novaLinha.classList.add("post-start");
+      } else if (item.curva === "Slow Flag") {
+          novaLinha.classList.add("post-slow");
+      } else if (item.curva === "Red Flag") {
+          novaLinha.classList.add("post-redflag");
+      }
 
-    const IdCell = document.createElement("td");
-    IdCell.classList.add("hidden");
-    IdCell.contenteditable = false;
-    IdCell.textContent = `${item._id}`;
+      // Aplica a cor da linha com base na presença de Report ou NFA
+      if (item.report === true) {
+          novaLinha.classList.add("report-true"); // Classe CSS para Report verdadeiro
+      }
+      if (item.nfa === true) {
+          novaLinha.classList.add("nfa-true"); // Classe CSS para NFA verdadeiro
+      }
+      if (item.priority) {
+        novaLinha.classList.add("priority-set");
+      }
+      
+      // Criação das células
+      const IdCell = document.createElement("td");
+      IdCell.classList.add("hidden");
+      IdCell.textContent = `${item._id}`;
 
-    // Camera
+      const CameraCell = document.createElement("td");
+      CameraCell.textContent = `${item.camera}`;
 
-    const CameraCell = document.createElement("td");
-    CameraCell.contenteditable = false;
-    CameraCell.textContent = `${item.camera}`;
+      const CurvaCell = document.createElement("td");
+      CurvaCell.textContent = `${item.curva}`;
 
-    // Curva
+      const HoraCell = document.createElement("td");
+      HoraCell.textContent = `${item.hora}`;
 
-    const CurvaCell = document.createElement("td");
-    CurvaCell.contenteditable = false;
-    CurvaCell.textContent = `${item.curva}`;
+      // Video Checkbox
+      const VideoCell = document.createElement("td");
+      const VideosCheck = document.createElement("input");
+      VideosCheck.type = "checkbox";
+      VideosCheck.checked = item.video === true;
+      VideosCheck.disabled = true;
+      VideoCell.appendChild(VideosCheck);
 
-    // Hora
+      // Report Checkbox
+      const ReportCell = document.createElement("td");
+      const ReportCheck = document.createElement("input");
+      ReportCheck.type = "checkbox";
+      ReportCheck.checked = item.report === true;
+      ReportCheck.disabled = true;
+      ReportCell.appendChild(ReportCheck);
 
-    const HoraCell = document.createElement("td");
-    HoraCell.contenteditable = false;
-    HoraCell.textContent = `${item.hora}`;
+      // NFA Checkbox
+      const NFACell = document.createElement("td");
+      const NFACheck = document.createElement("input");
+      NFACheck.type = "checkbox";
+      NFACheck.checked = item.nfa === true;
+      NFACheck.disabled = true;
+      NFACell.appendChild(NFACheck);
 
-    //Checkboxes
+      // Obs
+      const ObsCell = document.createElement("td");
+      ObsCell.textContent = `${item.obs}`;
 
-    //Video
-    const VideoCell = document.createElement("td");
-    VideoCell.contenteditable = "False";
-    const VideosCheck = document.createElement("input");
-    VideosCheck.type = "checkbox";
-    VideosCheck.contenteditable = "False";
-    if (item.video == true) {
-      VideosCheck.checked = true; // unceirtain
-    } else {
-      VideosCheck.checked = false; // unceirtain
-    }
-    VideosCheck.disabled = true;
-    VideoCell.appendChild(VideosCheck);
+      // Editar
+      const EditarCell = document.createElement("td");
+      const ImageEditCell = document.createElement("img");
+      ImageEditCell.src = "images/pen.png";
+      ImageEditCell.alt = "Editar";
+      ImageEditCell.onclick = function () {
+          abrirDetalhes(`${item._id}`);
+      };
+      EditarCell.appendChild(ImageEditCell);
 
-    // Report
+      // Botões Up/Down (escondidos)
+      const ButtonsCell = document.createElement("td");
+      ButtonsCell.id = "positionButton";
+      ButtonsCell.classList.add("hidden"); // Esconde o botão
+      const ButtonUp = document.createElement("button");
+      ButtonUp.classList.add("buttaoUpDown", "hidden"); // Esconde o botão
+      ButtonUp.textContent = "↑";
+      ButtonUp.onclick = function () {
+          moveUp(this);
+      };
+      const ButtonDown = document.createElement("button");
+      ButtonDown.classList.add("buttaoUpDown", "hidden"); // Esconde o botão
+      ButtonDown.textContent = "↓";
+      ButtonDown.onclick = function () {
+          moveDown(this);
+      };
+      ButtonsCell.appendChild(ButtonUp);
+      ButtonsCell.appendChild(ButtonDown);
 
-    const ReportCell = document.createElement("td");
-    ReportCell.contenteditable = "False";
-    const ReportCheck = document.createElement("input");
-    ReportCheck.type = "checkbox";
-    ReportCheck.contenteditable = false;
-    if (item.report == true) {
-      ReportCheck.checked = true; // unceirtain
-    } else {
-      ReportCheck.checked = false; // unceirtain
-    }
-    ReportCheck.disabled = true;
-    ReportCell.appendChild(ReportCheck);
+      const CorridaCell = document.createElement("td");
+      CorridaCell.classList.add("hidden");
+      CorridaCell.textContent = `${item.corrida}`;
 
-    // NFA
+      // Adiciona as células à nova linha
+      novaLinha.appendChild(IdCell);
+      novaLinha.appendChild(CameraCell);
+      novaLinha.appendChild(CurvaCell);
+      novaLinha.appendChild(HoraCell);
+      novaLinha.appendChild(VideoCell);
+      novaLinha.appendChild(ReportCell);
+ novaLinha.appendChild(NFACell);
+      novaLinha.appendChild(ObsCell);
+      novaLinha.appendChild(EditarCell);
+      novaLinha.appendChild(ButtonsCell);
+      novaLinha.appendChild(CorridaCell);
 
-    const NFACell = document.createElement("td");
-    NFACell.contenteditable = false;
-    const NFACheck = document.createElement("input");
-    NFACheck.type = "checkbox";
-    NFACheck.contenteditable = false;
-    if (item.nfa == true) {
-      NFACheck.checked = true; // unceirtain
-    } else {
-      NFACheck.checked = false; // unceirtain
-    }
-    NFACheck.disabled = true;
-    NFACell.appendChild(NFACheck);
-
-    // Obs
-
-    const ObsCell = document.createElement("td");
-    ObsCell.contenteditable = false;
-    ObsCell.textContent = `${item.obs}`;
-
-    // Editar
-
-    const EditarCell = document.createElement("td");
-    EditarCell.id = "tdlg";
-    const ImageEditCell = document.createElement("img");
-    ImageEditCell.id = "editlg";
-    ImageEditCell.src = "images/pen.png";
-    ImageEditCell.alt = "Editar";
-
-    ImageEditCell.onclick = function () {
-      abrirDetalhes(`${item._id}`);
-    };
-
-    EditarCell.appendChild(ImageEditCell);
-
-    // Cell for both buttons
-
-    // Up
-
-    const ButtonsCell = document.createElement("td");
-    ButtonsCell.id = "positionButton";
-    ButtonsCell.classList.add("hidden");
-    const ButtonUp = document.createElement("button");
-    ButtonUp.classList.add("buttaoUpDown");
-    ButtonUp.id = `buttonUp${item._id}`;
-    ButtonUp.onclick = function () {
-      moveUp(this);
-    };
-    ButtonUp.textContent = "↑";
-
-    //Down
-
-    const ButtonDown = document.createElement("button");
-    ButtonDown.classList.add("buttaoUpDown");
-    ButtonDown.id = `buttonDown${item._id}`;
-    ButtonDown.onclick = function () {
-      moveDown(this);
-    };
-    ButtonDown.textContent = "↓";
-
-    ButtonsCell.appendChild(ButtonUp);
-    ButtonsCell.appendChild(ButtonDown);
-
-    const CorridaCell = document.createElement("td");
-    CorridaCell.classList.add("hidden");
-    CorridaCell.contenteditable = false;
-    CorridaCell.textContent = `${item.corrida}`;
-
-    novaLinha.appendChild(IdCell);
-    novaLinha.appendChild(CameraCell);
-    novaLinha.appendChild(CurvaCell);
-    novaLinha.appendChild(HoraCell);
-    novaLinha.appendChild(VideoCell);
-    novaLinha.appendChild(ReportCell);
-    novaLinha.appendChild(NFACell);
-    novaLinha.appendChild(ObsCell);
-    novaLinha.appendChild(EditarCell);
-    novaLinha.appendChild(ButtonsCell);
-    novaLinha.appendChild(CorridaCell);
-
-    tabela.appendChild(novaLinha);
-    counter++;
+      // Adiciona a nova linha à tabela
+      tabela.appendChild(novaLinha);
   });
 
-  // Ordena os dados por hora crescente
-  const dados = tabela.getElementsByTagName("tr");
-  ordenarPorHoraCrescente(dados);
+  // Chama a função para ordenar as linhas por hora crescente
+  ordenarPorHoraCrescente(tabela.querySelectorAll("tr"));
 }
 
 // Função para ordenar os dados por hora crescente
 function ordenarPorHoraCrescente(dados) {
+  // Transforma a coleção de linhas (exceto a primeira) em um array
   const arrayDeDados = Array.from(dados).slice(1); // Remove a linha de cabeçalho
+
+  // Ordena as linhas com base na hora
   arrayDeDados.sort((a, b) => {
-    const horaA = a.cells[3].textContent.split(":").map(Number); // Obtém a hora da célula 3 (índice 2)
-    const horaB = b.cells[3].textContent.split(":").map(Number); // Obtém a hora da célula 3 (índice 2)
-    if (horaA[0] !== horaB[0]) {
-      return horaA[0] - horaB[0];
-    } else {
-      return horaA[1] - horaB[1];
-    }
+      const horaA = a.cells[3].textContent.split(":").map(Number); // Obtém a hora da célula 3
+      const horaB = b.cells[3].textContent.split(":").map(Number);
+
+      // Compara as horas, minutos e segundos
+      if (horaA[0] !== horaB[0]) {
+          return horaA[0] - horaB[0];
+      } else if (horaA[1] !== horaB[1]) {
+          return horaA[1] - horaB[1];
+      } else {
+          return (horaA[2] || 0) - (horaB[2] || 0); // Comparação de segundos
+      }
   });
-  // Reordena as linhas da tabela com os dados ordenados
-  arrayDeDados.forEach((linha) => {
-    tabela.appendChild(linha);
-  });
+
+  // Reorganiza as linhas da tabela com os dados ordenados
+  const tabela = dados[0].parentElement;
+  arrayDeDados.forEach((linha) => tabela.appendChild(linha)); // Anexa as linhas ordenadas de volta à tabela
 }
+
 
 // Adicionada a função para limpar a tabela
 function limparTabela() {
@@ -1179,7 +1156,7 @@ function limparTabela() {
   }
 
   // Definir o IP/URL para onde enviar os dados
-  const url = "http://192.168.1.87:16082/dropData";
+  const url = "http://192.168.51.53:16082/dropData";
 
   fetch(url, {
     method: "POST",
@@ -1255,7 +1232,7 @@ function enviarJsonNumpad() {
   const localStorageData = localStorage.getItem("novoNumpadNum");
 
   // Definir o IP/URL para onde enviar os dados
-  const url = "http://192.168.1.87:16082/addDataNumpad";
+  const url = "http://192.168.51.53:16082/addDataNumpad";
 
   // Verificar se existem dados no localStorage
   if (localStorageData) {
@@ -1317,7 +1294,7 @@ function envUpNumpadJson() {
     // Define o ID do documento a ser atualizado (obtido do localStorage)
     const id = updatedData._id;
     // Definir o IP/URL para onde enviar os dados
-    const url = `http://192.168.1.87:16082/updateNumpad/${id}`;
+    const url = `http://192.168.51.53:16082/updateNumpad/${id}`;
     // Envia os dados atualizados para o servidor
     console.log(updatedData);
     fetch(url, {
@@ -1348,7 +1325,7 @@ function envUpNumpadJson() {
 // Dar reset ao numero de numpad
 function eliminarNumpadNum() {
   // Definir o IP/URL para onde enviar os dados
-  const url = "http://192.168.1.87:16082/dropDataNumpad";
+  const url = "http://192.168.51.53:16082/dropDataNumpad";
 
   fetch(url, {
     method: "POST",
@@ -2081,7 +2058,7 @@ function updatePosition() {
     // Define o ID do documento a ser atualizado (obtido do localStorage)
     const id = updatedData1._id;
     // Definir o IP/URL para onde enviar os dados
-    const url = `http://192.168.1.87:16082/updateData/${id}`;
+    const url = `http://192.168.51.53:16082/updateData/${id}`;
 
     // Envia os dados atualizados para o servidor
     fetch(url, {
@@ -2112,7 +2089,7 @@ function updatePosition() {
     const id2 = updatedData2._id;
 
     // Definir o IP/URL para onde enviar os dados
-    const url2 = `http://192.168.1.87:16082/updateData/${id2}`;
+    const url2 = `http://192.168.51.53:16082/updateData/${id2}`;
 
     // Envia os dados atualizados para o servidor
     fetch(url2, {
@@ -2193,7 +2170,7 @@ function resetCorridas() {
 // Carregar opções para Obs
 function carregarObsOptions() {
   // Definir o IP/URL para onde enviar os dados
-  const url = "http://192.168.1.87:16082/getObsOptions";
+  const url = "http://192.168.51.53:16082/getObsOptions";
 
   fetch(url)
     .then((response) => response.json())
@@ -2223,7 +2200,7 @@ function enviarObsOptionJson() {
   console.log(localStorageData);
 
   // Definir o IP/URL para onde enviar os dados
-  const url = "http://192.168.1.87:16082/addObsOptions";
+  const url = "http://192.168.51.53:16082/addObsOptions";
 
   // Verificar se existem dados no localStorage
   if (localStorageData) {
