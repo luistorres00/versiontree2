@@ -1,12 +1,11 @@
-
 <link rel="icon" href="images/wfrLogo.jpg" type="image/x-icon">
 <link rel="shortcut icon" href="images/wfrLogo.jpg" type="image/x-icon">
 <link rel="stylesheet" href="cssS/cssCliente.css">
 
 <script src="JSs/script.js"></script>
+<script src="JSs/tableScrollCliente.js"></script>
 <script src="JSs/scriptslogin.js"></script>
 <script src="server.js"></script>
-
 
 <script src="https://cdn.jsdelivr.net/npm/exceljs/dist/exceljs.min.js"></script>
 <body onload="">
@@ -24,11 +23,11 @@
       </td>
     </tr>
     <tr>
-      <td>
+     <!-- <td>
         <p id="currentOptionHeader">Numpad:</p>
         <img id="iconNumpad" src="images/numpad.png" onclick="trocarParaNumpad()">
         <img id="iconTabela"src="images/tabela.png" onclick="trocarParaTabela()" class="hidden">
-      </td>
+      </td> -->
     </tr>
   </table>
   <div id ="rodaDentadaDiv" >
@@ -36,35 +35,40 @@
   </div>
 </div>
 
-<div id="clock"></div>
-<div id="date"></div>
+<div id="clock-date-container">
+  <div id="clock">12:45</div>
+  <div id="date">03/12/2024</div>
+</div>
 
 <!-- Adicionar a tabela com cabeçalho e uma linha inicial -->
-<table id="tabela">
-    <thead>
-        <tr>
-          <th id="thcolor" class="hidden">Id</th>
-          <th id="thcolor">Camera</th>
-          <th id="thcolor">Turn/Post</th>
-          <th id="thcolor" class="hora-editavel" onclick="editarHora()">Time</th>
-          <th id="thcolor">Vídeo</th>
-          <th id="thcolor">Report</th>
-          <th id="thcolor">N.F.A.</th>
-          <th id="thcolorObs">Obs</th>
-          <th id="tdlg">Edit</th>
-          <th id ="hcolor" class="hidden">Posição</th>
-          <th id="thcolorCorrida" class="hidden">Race</th>
-        </tr>
-    </thead>
-    <tbody>
-        
-    </tbody>
-</table>
+<div class="table-container">
+  <div id="table-background"></div>
+  <table id="tabela">
+      <thead>
+          <tr>
+            <th id="thcolor" class="hidden">Id</th>
+            <th id="thcolor">Camera</th>
+            <th id="thcolor">Turn/Post</th>
+            <th id="thcolor" class="hora-editavel" onclick="editarHora()">Time</th>
+            <th id="thcolor">Vídeo</th>
+            <th id="thcolor">Report</th>
+            <th id="thcolor">N.F.A.</th>
+            <th id="thcolorObs">Obs</th>
+            <th id="tdlg">Edit</th>
+            <th id ="hcolor" class="hidden">Posição</th>
+            <th id="thcolorCorrida" class="hidden">Race</th>
+          </tr>
+      </thead>
+      <tbody>
+          
+      </tbody>
+  </table>
+</div>
 
 <!--Protótipo numpad(instantâneo) em comentário (É necessário descomentar a função AdicionarLinha() dentro das funções obterCurvaNum() e obterStartOrRF)-->
 
 <!--Protótipo numpad em comentário (Com pop up)-->
-<div id ="numpad" class="hidden">
+<div id="numpad"> 
 </div> 
 
 <div id="popupRodadentada" class="popup">
@@ -96,7 +100,7 @@
 
 </div>
 <!-- Pop up Camera select -->
-<div id="popupNumpad" class="popup">
+<!-->div id="popupNumpad" class="popup">
   <div class="popup-content">
     <span class="close" onclick="fecharPopupNumpad()">&times;</span>
     <table id="popupNumpadTable">
@@ -114,6 +118,7 @@
     </table>
   </div>
 </div>
+-->
 
 <div id="popupFiltros" class="popup">
   <div class="popup-content">
@@ -146,25 +151,77 @@
 </div>
 
 <!-- PopUp para adicionar dados -->
-<div id="popup" class="popup"  onload="limparLS()">
+<div id="popup" class="popup" onload="limparLS()">
   <div class="popup-content">
     <span class="close" onclick="fecharPopup()">&times;</span>
-    <input type="text" id="curvaInput" placeholder="Curva/Posto">&nbsp;<label>Turn/Post</label>
-    <input type="text" id="horainput" value="" placeholder="hora">&nbsp;<label>Time</label><br>
-    <input type="text" id="cameraNumber" placeholder="Camera">&nbsp;<label>Camera</label><br>
-    <input type="number" id="inputCorrida" placeholder="Numero Corrida">&nbsp;<label>Race nº</label><br>
-    <input type="checkbox" id="videoCheck">Vídeo<br>
-    <input type="checkbox" id="reportCheck">Report<br>
-    <input type="checkbox" id="priorityCheck"> Priority<br>
-    <textarea id="obsInput" placeholder="obs"></textarea><br><br>
-    <select id="obsInputSelect" >
-      <option value="">Observations</option>
-    </select><br>
-    <textarea class="hidden" id="obsInput" placeholder="obs"></textarea><br>
-    <button onclick="fecharPopup(); adicionarLinha()">Add Report</button>
+    <table id="popupNumpadTable">
+      <tr>
+        <td colspan="3" class="button-container">
+          <div>
+            <button class="primary-numpad-Button" onclick="adicionarCameraOrPost('Camera');fecharPopupNumpad()" id="opcaoCamera" value="Cam">Camera</button>
+            <button class="primary-numpad-Button" onclick="adicionarCameraOrPost('Post');fecharPopupNumpad()" id="opcaoPost" value="Post">Post</button>
+            <button class="primary-numpad-Button" onclick="adicionarCameraOrPost('Turn');fecharPopupNumpad()" id="opcaoTurn" value="Turn">Turn</button>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="3" style="text-align: center;">
+          <button id="button-minus1" onclick="adjustTime(-1)" style="margin: 0 5px; width: 100px; height: 100px; border-radius: 0; font-size: 16px;">-1 Lap</button>
+          <button id="button-minus2" onclick="adjustTime(-2)" style="margin: 0 5px; width: 100px; height: 100px; border-radius: 0; font-size: 16px;">-2 Laps</button>
+          <button onclick="fecharPopup(); adicionarLinha()" style="margin: 0 5px; width: 100px; height: 100px; border-radius: 0; font-size: 16px;"> Report</button>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="3">
+          <input type="checkbox" id="reportCheck">Report
+          <input type="checkbox" id="priorityCheck"> Priority
+        </td>
+      </tr>
+      <tr>
+        <td colspan="3">
+          <textarea id="obsInput" placeholder="obs"></textarea><br><br>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="3">
+          <select id="obsInputSelect" >
+            <option value="">Observations</option>
+          </select><br>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label for="curvaInput">Curva/Posto:</label>
+        </td>
+        <td>
+          <label for="horainput">Time:</label>
+        </td>
+        <td>
+          <label for="cameraNumber">Camera:</label>
+        </td>
+        <td>
+          <label for="inputCorrida">Race nº:</label>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <input type="text" id="curvaInput" placeholder="Curva/Posto" style="width: 100%; margin: 5px;">
+        </td>
+        <td>
+          <input type="text" id="horainput" value="" placeholder="hora" style="width: 100%; margin: 5px;">
+        </td>
+        <td>
+          <input type="text" id="cameraNumber" placeholder="Camera" style="width: 100%; margin: 5px;">
+        </td>
+        <td>
+          <input type="number" id="inputCorrida" placeholder="Numero Corrida" style="width: 100%; margin: 5px;">
+        </td>
+      </tr>
+    </table>
   </div>
 </div>
 
+<!-- PopUp para editar dados-->
 <div id="popup2" class="popup">
   <div class="popup-content" id="popupEdit" > <!-- Sem id="popupEdit" para o utilizador não mexer nas posições-->
   <span class="close" onclick="fecharPopup2()">&times;</span>
@@ -172,7 +229,6 @@
   <input type="text" id="horainput2" value="" placeholder="hora">&nbsp;<label>Time</label><br>
   <input type="text" id="cameraNumber2" placeholder="Camera">&nbsp;<label>Camera</label><br>
   <input type="number" id="inputCorrida2" placeholder="Corrida">&nbsp;<label>Race nº</label><br>
-  <input type="checkbox" id="videoCheck2"> Vídeo<br>
   <input type="checkbox" id="reportCheck2"> Report<br>
   <input type="checkbox" id="nfacheck2"> N.F.A.<br>
   <input type="checkbox" id="priorityCheck2"> Priority<br><br>

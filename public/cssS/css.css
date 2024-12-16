@@ -1,54 +1,182 @@
 /* Estilos CSS */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+}
+
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Arial', Helvetica, sans-serif;
   margin: 20px;
   background-color: #f4f4f4;
-  /*color: rgb(3, 3, 3);*/
   color: #575656;
+  min-height: 150vh;
+}
+
+@font-face {
+    font-family: 'Arial';
+    src: url('fonts/arial.woff') format('woff'); /* Ajuste o caminho e formato conforme necessário */
+    font-weight: normal;
+    font-style: normal;
 }
 
 #logo {
   position: fixed;
-  top: 10px;
+  top: 23px;
   left: 10px;
   width: 250px;
   height: auto;
   display: block;
-  z-index: 999; /* Ensures the logo stays above other content */
+  z-index: 1999;
 }
 
 /* Estilo para centralizar o título */
 #header {
-text-align: center; /* Centraliza o texto horizontalmente */
-margin: 0 auto; /* Centraliza horizontalmente */
-max-width: auto; /* Largura máxima para manter o alinhamento */
-color: white;
+  text-align: center;
+  margin: 0 auto;
+  max-width: auto;
+  color: white;
 }
 
 /* Estilo para centralizar os botões */
+.button-container {
+  text-align: right;
+  margin-right: 60px; /* Aumentado novamente para mover os botões mais para a direita */
+}
+
 .buttons-container {
-display: flex; /* Ativa o flexbox */
-justify-content: center; /* Centraliza os itens horizontalmente */
-margin: 20px auto; /* Centraliza e adiciona um espaçamento superior e inferior */
-max-width: 80%; /* Largura máxima para manter o alinhamento */
+  display: flex;
+  justify-content: center;
+  margin: 20px auto;
+  max-width: 80%;
 }
 
 #content-top {
-position: fixed;
-top: 0;
-left: 50%; /* Move o elemento para o centro da janela de visualização */
-transform: translateX(-50%); /* Centraliza horizontalmente */
-width: 100%;
-max-width: 900px;
-background-color: #E30613;
-padding: 18px;
-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-z-index: 998;
-text-align: center; /* Centraliza os elementos dentro de #content-top */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 97px;
+  background-color: #E30613;
+  padding: 2px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  border-bottom: 2px solid #ff0000;
+}
+
+#content-top h1 {
+  color: white;
+  margin: 0;
+  text-align: center;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  max-width: 100%;
+}
+
+.search-input {
+  padding: 5px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 200px;
+}
+
+#filtroImg {
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 768px) {
+  .search-input {
+    width: 150px;
+  }
+  
+  #filtroImg {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .search-input {
+    width: 120px;
+    font-size: 14px;
+  }
+  
+  #filtroImg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .search-container {
+    gap: 5px;
+  }
+  
+  .search-box {
+    gap: 5px;
+  }
+  
+  .search-input {
+    width: 90px;
+    padding: 4px 8px;
+    font-size: 13px;
+  }
+  
+  #filtroImg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+@media screen and (max-width: 350px) {
+  .search-input {
+    width: 70px;
+    padding: 3px 6px;
+    font-size: 12px;
+  }
+  
+  #filtroImg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.search-button {
+  padding: 5px 15px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.search-button:hover {
+  background-color: #45a049;
 }
 
 #content-top button {
-margin: 5px; /* Adiciona espaçamento entre os botões */
+  margin: 5px;
 }
 
 button {
@@ -62,88 +190,882 @@ button {
   margin-bottom: 50px;
 }
 
-/*Botao de adicionar linha*/
-#penasdicionar{
-width: 150px;
-height: 150px;
-margin: 5px;
-padding: 10px;
-cursor: pointer;
-background-color: #E30613;
-color: white;
-border: 2px solid white;
-border-radius: 0px;
-margin-bottom: 50px;
-}
-
-table {
-  border-collapse: collapse;
-  width: 50%;
-  margin: auto;
-  margin-top: 10px;
-  background-color: white;
-}
-
-th, td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: center;
-  min-width: 80px;  /* Definir a largura mínima desejada para as colunas */
-  color: #575656;
-}
-
-th {
-  background-color: #f2f2f2;
-  color: #575656;
-}
-
-.hora-editavel {
+.button {
+  padding: 10px 20px;
+  background-color: #4CAF50; /* Cor do botão */
+  color: white;
+  border: none;
+  border-radius: 5px;
   cursor: pointer;
-  color: #ffffff;
-  text-decoration: none;
+  transition: transform 0.1s, background-color 0.1s, box-shadow 0.1s; /* Transições suaves */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para efeito 3D */
 }
-/* Estilizando checkboxes */
+
+.button.pressed {
+  transform: translateY(4px); /* Move o botão para baixo ao ser pressionado */
+  background-color: #2e7031; /* Cor mais escura quando pressionado */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra reduzida para efeito 2D */
+}
+
+/* Cores para campos preenchidos */
+.priority-set td {
+  background-color: #e29032; /* Cor de fundo vermelha */
+  color: white; /* Cor do texto branco */
+  animation: blinks 2s infinite;
+  transition-duration: 1s infinite;
+}
+
+/* Estilos para linhas com report true */
+tr.report-true td {
+  background-color: #575656; /* Dark gray */
+  color: white;
+}
+
+/* Estilos para linhas com nfa true */
+tr.nfa-true td {
+  background-color: #5756565d; /* Semi-transparent dark gray */
+  color: black;
+}
+
+/* Estilo específico para células individuais */
+.report-true td:nth-child(6) {
+  background-color: #575656 !important;
+  color: white !important;
+}
+
+/* Estilo para a célula que contém o checkbox marcado */
+#tabela td:nth-child(6):has(input[type="checkbox"]:checked) {
+  background-color: #575656 !important;
+  color: white !important;
+}
+
+td[data-report="true"] {
+  background-color: #575656 !important;
+  color: white !important;
+}
+
+.table-container {
+  position: fixed;
+  top: 158px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 52%;
+  height: calc(100vh - 180px);
+  background-color: white;
+  margin-right: 200px;
+  overflow: auto;
+}
+
+#tabela {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
+}
+
+#tabela thead {
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 999;
+}
+
+#tabela thead th {
+  position: sticky;
+  top: 0;
+  background-color: white;
+  padding: 8px;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+}
+
+#tabela th {
+  background-color: #f2f2f2;
+  padding: 8px;
+}
+
+#tabela tbody td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Larguras das colunas */
+#tabela th:nth-child(1),
+#tabela td:nth-child(1) {
+  width: 30px;
+  min-width: 30px;
+}
+
+#tabela th:nth-child(2),
+#tabela td:nth-child(2) {
+  width: 50px;
+  min-width: 50px;
+}
+
+#tabela th:nth-child(3),
+#tabela td:nth-child(3) {
+  width: 65px;
+  min-width: 65px;
+}
+
+#tabela th:nth-child(4),
+#tabela td:nth-child(4) {
+  width: 65px;
+  min-width: 65px;
+}
+
+#tabela th:nth-child(5),
+#tabela td:nth-child(5),
+#tabela th:nth-child(6),
+#tabela td:nth-child(6),
+#tabela th:nth-child(7),
+#tabela td:nth-child(7) {
+  width: 50px;
+  min-width: 50px;
+}
+
+#tabela th:nth-child(8),
+#tabela td:nth-child(8) {
+  width: 180px;
+  min-width: 180px;
+}
+
+#tabela th:nth-child(9),
+#tabela td:nth-child(9) {
+  width: 40px;
+  min-width: 40px;
+}
+
+/* Larguras responsivas */
+@media screen and (min-width: 1367px) {
+  .table-container { width: 60%; }
+  #logo { width: 220px; }
+  #numpad {
+    width: 18%;
+    top: 60vh;
+  }
+  #numpad-table {
+    width: 16vw;
+  }
+  .numpad-Button {
+    width: 6vw;
+    font-size: 17px;
+    padding: 8px;
+  }
+  #raceStart, #raceRF, #raceSF {
+    width: 160px;
+    height: 40px;
+    font-size: 13px;
+  }
+}
+
+@media screen and (max-width: 1366px) {
+  .table-container { width: 55%; }
+  #logo { width: 200px; }
+  #content-top { height: 100px; }
+  .table-container { top: 138px; }
+  #numpad {
+    width: 16%;
+    top: 58vh;
+  }
+  #numpad-table {
+    width: 15vw;
+  }
+  .numpad-Button {
+    width: 5.5vw;
+    font-size: 16px;
+    padding: 7px;
+  }
+  #raceStart, #raceRF, #raceSF {
+    width: 140px;
+    height: 35px;
+    font-size: 12px;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .table-container { width: 60%; }
+  #logo { width: 180px; }
+  #content-top { 
+    height: 90px;
+    padding: 12px;
+  }
+  .table-container { top: 128px; }
+  #numpad {
+    width: 15%;
+    top: 56vh;
+  }
+  #numpad-table {
+    width: 14vw;
+  }
+  .numpad-Button {
+    width: 5vw;
+    font-size: 15px;
+    padding: 6px;
+    margin: 2px;
+  }
+  #raceStart, #raceRF, #raceSF {
+    width: 110px;
+    height: 32px;
+    font-size: 11px;
+    padding: 6px;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .table-container { width: 65%; }
+  #logo { width: 150px; }
+  #content-top { 
+    height: 80px;
+    padding: 10px;
+  }
+  .table-container { top: 118px; }
+  #numpad {
+    width: 20%;
+    top: 54vh;
+  }
+  #numpad-table {
+    width: 18vw;
+  }
+  .numpad-Button {
+    width: 8vw;
+    font-size: 16px;
+    padding: 8px;
+    margin: 3px;
+  }
+  #raceStart, #raceRF, #raceSF {
+    width: 90px;
+    height: 28px;
+    font-size: 10px;
+    padding: 5px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .table-container { 
+    width: 70%;
+    top: 108px;
+  }
+  #content-top { 
+    height: 70px;
+    padding: 8px;
+  }
+  #tabela th, #tabela td {
+    padding: 6px;
+    font-size: 0.9em;
+  }
+  #numpad {
+    width: 18%;
+    top: 52vh;
+  }
+  #numpad-table {
+    width: 16vw;
+    padding-top: 0.5vh;
+    padding-bottom: 0.5vh;
+  }
+  .numpad-Button {
+    width: 7vw;
+    font-size: 15px;
+    padding: 7px;
+    margin: 2px;
+    border-width: 2px;
+  }
+  #raceStart, #raceRF, #raceSF {
+    width: 75px;
+    height: 25px;
+    font-size: 9px;
+    padding: 4px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .table-container { 
+    width: 75%;
+  }
+  #numpad {
+    width: 16%;
+    top: 50vh;
+  }
+  #numpad-table {
+    width: 14vw;
+  }
+  .numpad-Button {
+    width: 6vw;
+    font-size: 14px;
+    padding: 6px;
+    margin: 2px;
+    border-width: 2px;
+  }
+  #raceStart, #raceRF, #raceSF {
+    width: 65px;
+    height: 22px;
+    font-size: 8px;
+    padding: 3px;
+  }
+}
+
+/* Cores das linhas */
+#tabela tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+#tabela tbody tr:hover {
+  background-color: #f5f5f5;
+}
+
+/* Allow table cells to expand vertically based on content */
+#tabela td {
+  height: auto;
+  white-space: normal;
+  vertical-align: middle;
+  line-height: 1.4;
+}
+
+/* Specific for observation column to handle wrapping */
+#tabela td:nth-child(8) {
+  height: auto;
+  white-space: normal;
+  word-wrap: break-word;
+  word-break: break-word;
+  min-height: 20px;
+  padding: 8px;
+  text-align: left;
+}
+
+/* Remove any fixed height constraints */
+#tabela tr {
+  height: auto;
+}
+
+tr.selected {
+  background-color: #ffeb3b !important;
+  position: sticky;
+  top: 120px;
+  z-index: 998;
+}
+
+tr.highlight {
+  background-color: #87CEEB;
+}
+
+/* Prioridade */
+@keyframes blinks {
+  0% {
+    background-color: #f0f0f0; /* Define o ponto final da cor */
+    color: black;
+  }
+  
+  100% {
+    background-color: orangered; /* Define o ponto inicial da cor */
+    color: black;
+  }
+}
+
+#menu {
+  position: fixed;
+  top: 70%; /* Ajuste a altura conforme necessário */
+  right: 0;
+  transform: translateY(-50%);
+  width: auto; /* Defina a largura da sua div */
+  height: auto;
+  height: 50px;
+  background-color: #f0f0f0; /* Cor de fundo opcional */
+  padding: 10px; /* Espaçamento interno opcional */
+  /*background-color: #E30613;*/
+  text-align: center;
+}
+
+.time-container {
+  position: fixed;
+  top: 158px;
+  right: 20px;
+  background-color: white;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1990;
+  text-align: center;
+}
+
+/* Clock and Date Container */
+#clock-date-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  z-index: 1999;
+  color: white;
+}
+
+#clock {
+  font-weight: bold;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 2px;
+}
+
+#date {
+  font-size: 12px;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  #clock-date-container {
+    right: 10px;
+  }
+  #clock {
+    font-size: 14px;
+  }
+  #date {
+    font-size: 10px;
+  }
+}
+
+/* Gear Icon */
+#rodaDentadaDiv {
+  position: fixed;
+  right: 20px;
+  top: 45px;
+  z-index: 999;
+  margin-top: 10px; /* Ajuste conforme necessário */
+}
+
+#rodaDentada {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+#rodaDentada:hover {
+  transform: rotate(90deg);
+}
+
+@media (max-width: 768px) {
+  #rodaDentadaDiv {
+    position: fixed;
+    left: 20px;
+    top: 80px;
+    z-index: 999;
+  }
+  
+  #rodaDentada {
+    width: 25px;
+    height: 25px;
+  }
+}
+
+@media (max-width: 480px) {
+  #rodaDentada {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+@media (max-width: 350px) {
+  #rodaDentadaDiv {
+    left: 15px;
+    top: 70px;
+  }
+  
+  #rodaDentada {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+#clock-date-container {
+  position: fixed;
+  right: 20px;
+  top: 20px;
+  z-index: 3199;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 5px;
+}
+
+#clock {
+  font-size: 24px;
+  font-weight: bold;
+  color: rgb(255, 255, 255);
+  margin-bottom: 2px;
+}
+
+#date {
+  font-size: 16px;
+  color: white;
+}
+
+#rodaDentadaDiv {
+  position: absolute;
+  right: 60px;
+  top: 75%;
+  transform: translateY(-50%);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+}
+
+#rodaDentada {
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+}
+
+/* Icon roda dentada*/
+#rodaDentadaDiv{
+  display:flex;
+  justify-content: flex-end;
+  filter:invert();
+}
+
+#rodaDentada:hover{
+  cursor: pointer;
+  animation: spin 2s linear infinite;
+}
+
+#tableRodaDentada{
+  margin-top: 0;
+}
+
+.hidden {
+  display: none;
+}
+
+.popup {
+  position: fixed; /* Fica no lugar */
+  left: 50%; /* Move para o meio da tela horizontalmente */
+  top: 50%; /* Move para o meio da tela verticalmente */
+  transform: translate(-50%, -50%); /* Ajusta a posição para centralizar */
+  width: 100%; /* Largura responsiva */
+  max-width: 1000px; /* Aumenta a largura máxima para 1000px */
+  height: auto; /* Altura automática */
+  background-color: rgba(0, 0, 0, 0.5); /* Fundo preto com opacidade */
+  z-index: 1; /* Fica na frente */
+  overflow: auto; /* Habilita rolagem se necessário */
+}
+
+.popup-content {
+  background-color: #fefefe;
+  padding: 20px; /* Reduzir padding se necessário */
+  border: 1px solid #888;
+  width: 100%; /* Largura 100% do contêiner */
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  margin: auto; /* Centraliza verticalmente os elementos internos */
+}
+
+.popup-content > * {
+  margin: auto; /* Centraliza verticalmente os elementos internos */
+}
+
+.popup-content button {
+  margin: 5px 0; /* Margem vertical reduzida entre os botões */
+}
+
+.popup-content input[type="checkbox"] {
+  margin: 2px 0; /* Margem vertical reduzida para as checkboxes */
+}
+
+/* Media Queries para dispositivos menores */
+@media (max-width: 600px) {
+  .popup {
+    width: 95%; /* Largura maior em telas pequenas */
+  }
+}
+
+.popup {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  left: 50vw;
+  top: 400px;
+  width: auto;
+  height: auto;
+  overflow: auto;
+  z-index: 10;
+}
+
+.popup-content {
+  align-items: center;
+  background-color: #fefefe;
+  margin: 1% auto;
+  background-position-y: center;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+#popup {
+  z-index: 10000;
+}
+
+#popup2 {
+  z-index: 10001;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Media queries para popups responsivos */
+@media screen and (min-width: 1367px) {
+  #popupConfiguracoes, #popupFiltros, #popupAdicionaObservações, #popupSelecao {
+    width: 82.3%;
+  }
+  #popupNumpad {
+    width: 96.1%;
+  }
+}
+
+@media screen and (max-width: 1366px) {
+  #popupConfiguracoes, #popupFiltros, #popupAdicionaObservações, #popupSelecao {
+    width: 96.1%;
+  }
+  #popupNumpad {
+    width: 109.8%;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  #popupConfiguracoes, #popupFiltros, #popupAdicionaObservações, #popupSelecao {
+    width: 109.8%;
+  }
+  #popupNumpad {
+    width: 138.6%;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  #popupConfiguracoes, #popupFiltros, #popupAdicionaObservações, #popupSelecao {
+    width: 137.2%;
+  }
+  #popupNumpad {
+    width: 138.6%;
+  }
+}
+
+/* Estilo base para o popup de seleção */
+#popupSelecao {
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+#popupSelecao .popup-content {
+  display: block;
+  text-align: center;
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  border-radius: 5px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+/* Media queries para responsividade */
+@media screen and (min-width: 1367px) {
+  #popupSelecao .popup-content {
+    width: 30%;
+  }
+}
+
+@media screen and (max-width: 1366px) {
+  #popupSelecao .popup-content {
+    width: 35%;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  #popupSelecao .popup-content {
+    width: 40%;
+    margin: 20% auto;
+  }
+  #popupSelecao button {
+    padding: 12px;
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  #popupSelecao .popup-content {
+    width: 50%;
+    margin: 25% auto;
+  }
+  #popupSelecao button {
+    padding: 10px;
+    font-size: 13px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  #popupSelecao .popup-content {
+    width: 70%;
+    margin: 30% auto;
+    padding: 15px;
+  }
+  #popupSelecao button {
+    padding: 8px;
+    font-size: 12px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  #popupSelecao .popup-content {
+    width: 85%;
+    margin: 35% auto;
+    padding: 10px;
+  }
+  #popupSelecao button {
+    padding: 7px;
+    font-size: 11px;
+  }
+}
+
+/* Relógio */
+.relogio {
+  position: fixed;
+  top: 10px; /* Ajuste conforme necessário */
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 24px;
+  color: #333;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+  .relogio {
+    font-size: 20px;
+    padding: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .relogio {
+    font-size: 18px;
+    padding: 6px;
+  }
+}
+
+/* Race status colors */
+.status-start {
+    background-color: #4CAF50 !important; /* Green */
+    color: white !important;
+}
+
+.status-slow {
+    background-color: #FFD700 !important; /* Yellow */
+    color: black !important;
+}
+
+.status-redflag {
+    background-color: #FF0000 !important; /* Red */
+    color: white !important;
+}
+
+/* Race status styles */
+tr.post-start td {
+  background-color: #18cc00; /* Green */
+  color: black;
+}
+
+tr.post-slow td {
+  background-color: #d6ff07; /* Yellow */
+  /* color: white; */
+}
+
+tr.post-redflag td {
+  background-color: #E30613; /* Red */
+  color: white;
+}
+
+tr.priority-set td {
+  animation: blinks 1s infinite !important;
+}
+
+/* Priority animation */
+
+/* Custom checkbox styling */
 input[type="checkbox"] {
-/* Escondendo a checkbox padrão */
-appearance: none;
--webkit-appearance: none;
--moz-appearance: none;
-/* Definindo um tamanho padrão para a checkbox */
-width: 20px;
-height: 20px;
-/* Definindo o fundo branco */
-background-color: white;
-/* Adicionando uma borda */
-border: 1px solid #ccc;
-/* Definindo um cursor personalizado */
-cursor: pointer;
-/* Posicionando o texto ao lado da checkbox */
-vertical-align: middle;
-margin-right: 5px; /* Espaço entre a checkbox e o texto */
+  /* Escondendo a checkbox padrão */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  /* Definindo um tamanho padrão para a checkbox */
+  width: 25px;  /* Ajustado para 25px */
+  height: 25px; /* Ajustado para 25px */
+  /* Definindo o fundo branco */
+  background-color: white;
+  /* Adicionando uma borda */
+  border: 1px solid #ccc;
+  /* Definindo um cursor personalizado */
+  cursor: pointer;
+  /* Posicionando o texto ao lado da checkbox */
+  vertical-align: middle;
+  margin-right: 5px; /* Espaço entre a checkbox e o texto */
+  display: inline-block; /* Garantir que a checkbox se comporte como um bloco inline */
 }
 
 /* Estilizando a marcação quando a checkbox está marcada */
 input[type="checkbox"]:checked::before {
-/* Adicionando um visto vermelho */
-content: "\2713"; /* Código unicode para visto */
-color: red; /* Cor do visto */
-font-size: 25px; /* Tamanho do visto */
-line-height: 20px; /* Alinhamento vertical */
+  /* Adicionando um visto vermelho */
+  content: "\2713"; /* Código unicode para visto */
+  color: red; /* Cor do visto */
+  font-size: 20px; /* Ajusta o tamanho do visto */
+  line-height: 25px; /* Alinhamento vertical ajustado para 25px */
+  position: relative;
+  top: -2px; /* Ajusta a posição vertical do visto */
 }
-/*Tabela numpad*/
 
+/* Estilo para o texto All Races */
+#pesquisaCorrida option {
+  color: black;
+}
+
+#searchCorrida {
+  color: white !important;
+}
+
+/* Numpad styles */
 #numpad{
-
   position: fixed;
   top: 60vh;
   transform: translateY(-50%);
-  right: 0px; /* Ajuste o valor conforme necessário para definir a distância do lado esquerdo */
+  right: 0px;
   width: 20%;
   text-align: center;
 }
+
 #botao-numpad-voltar{
   margin-bottom: 0px;
 }
+
 #numpad-table{
   padding-top: 1vh;
   padding-bottom: 1vh;
@@ -155,27 +1077,28 @@ line-height: 20px; /* Alinhamento vertical */
   margin-right: 0px;
   width: 18vw;
   right:0;
-
 }
+
 .numpad-header{
   font-size: 20px;
   border: none;
-  background: transparent ;
+  background: transparent;
   color:white;
   border-bottom: white;
 }
+
 .numpad-cell{
   all:unset;
   vertical-align: middle;
 }
+
 .numpad-row{
   min-width: none;
   text-align: center;  
   background-color: #E30613;
-  background: transparent ;
-
-
+  background: transparent;
 }
+
 .numpad-Button{
   width: 8vw;
   margin: 3px;
@@ -190,13 +1113,14 @@ line-height: 20px; /* Alinhamento vertical */
 }
 
 #popupNumpad.popup{
-  z-index: 10002; /*Puxar 1 para a frente do pop up de informações gerais*/
+  z-index: 10002;
 }
 
 #popupNumpadTable,#popupNumpadTable td{
   background: transparent;
-  border:none; /*tirar as borders de vestígio*/
+  border:none;
 }
+
 .primary-numpad-Button{
   width: 5vw;
   height: 5vh;
@@ -214,389 +1138,96 @@ line-height: 20px; /* Alinhamento vertical */
   width: 250px;
   height: 60px;
   vertical-align: middle;
-  background-color: #18cc00 ;
+  background-color: #18cc00;
+  border: none;
+  padding: 10px;
+  margin: 5px;
+  cursor: pointer;
+  color: white;
+  font-size: 16px;
 }
+
 #raceRF{
   width: 250px;
   height: 60px;
   vertical-align: middle;
+  background-color: #E30613;
+  border: none;
+  padding: 10px;
+  margin: 5px;
+  cursor: pointer;
+  color: white;
+  font-size: 16px;
 }
+
 #raceSF{
   width: 250px;
   height: 60px;
   vertical-align: middle;
-  background-color: #d2e003;
-  color: #575656;
+  background-color: #ffcc00;
+  color: black;
+  border: none;
+  padding: 10px;
+  margin: 5px;
+  cursor: pointer;
+  font-size: 16px;
 }
 
-#extraButtons{
-  width:25%;
+#extraButtons {
+  width: 25%;
   position: fixed;
   top: 42vh;
   transform: translateY(-50%);
-  left: 0vw; /* Ajuste o valor conforme necessário para definir a distância do lado esquerdo */
-  width: 25%;
+  left: 0vw;
   text-align: left;
   margin-left: 0vw;
-
 }
 
-.hidden{
-  display:none;
-}
-
-/*Numpad 2*/
-
-#numpad2{
-
-  width:25%;
-  position: fixed;
-  top: 60vh;
-  transform: translateY(-50%);
-  right: 0px; /* Ajuste o valor conforme necessário para definir a distância do lado esquerdo */
-  width: 25%;
-  text-align: center;
-}
-
-#numpad-table2{
-  padding-top: 1vh;
-  padding-bottom: 1vh;
-  margin-top: 0px;
-  border-collapse: separate;
-  border-spacing: 0px;
-  border-radius: 0px;
-  background-color: #E30613;
-  margin-right: 0px;
-  width: 20vw;
-  right:0;
-
-}
-
-/**/
-.popup {
-
-  display: none;
-  justify-content: center;
-  align-items: center;
-  position: fixed;
-  left: 37vw;
-  top: 15vw;
-  width: auto;
-  height: auto;
-  overflow: auto;
-  /*background-color: rgba(0,0,0,0.4);*/
-  z-index: 10;
-}
-
-.popup-content {
-  align-items: center;
-  background-color: #fefefe;
-  margin: 1% auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); /* Adicione sombra para destacar o popup */
-}
-
-#popup{
-  z-index: 10000;
-}
-
-#popup2{
-z-index: 10001;
-}
-
-.close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-#thcolor {
-  color: #575656;
-}
-
-#thcolorObs {
-  color: #575656;
-  min-width:17.5vw;
-}
-
-.class-Obs{
-  word-wrap: break-word;
-  max-width: 17.5vw; /* optional: set a maximum width for the cell */
-}
-
-#tbuttons{
-  color:#575656;
-}
-
-#tdlg{
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
-  min-width: 30%;
-  width: 10%;
-}
-
-#editlg{
-  content:url(/images/pen.png);
-  display: block;
-  margin-left: auto;
-  margin-right:auto;
-  width: 60%;
-  justify-content: center;
-}
-
-#editlg:hover {
-  content:url(/images/pen.png); /* Adiciona a animação ao passar o mouse */
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg); 
-  }
-  100% {
-    transform: rotate(360deg); 
-  }
-}
-
-
-#tabela thead {
-  position: sticky;
-  top: 18.8vh; /* Adjust this value according to your header's height */
-  background-color: #ffffff; /* Change this to your desired background color */
-  z-index: 999; /* Ensures the header stays above other content */
-}
-
-#tabela{
-  margin-top: 190.2px;
-}
-
-/* Teste responsive subsurface*/
-/* @media screen and (max-width: 1370px) {
-  #tabela thead{
-      top: 18.9vh;
-  }
-  #tabela{
-    margin-top: 4vh;
-  }
-
-  #extraButtons button{
-    width: 50%;
-    margin-left: 20px;
-  }
-
-  #numpad-table{
-    width: 30%;
-  }
-  #numpad{
-    width: 50%;
-  }
-  #numpad button{
-    width: 30%;
-  }
-  #logo{
-    width: 15%;
-    margin-top: 3%;
-  }
-  #clock{
-    padding: 0px;
-  }
-}
- */
-
-#menu {
-  position: fixed;
-  top: 70%; /* Ajuste a altura conforme necessário */
-  right: 0;
-  transform: translateY(-50%);
-  width: auto; /* Defina a largura da sua div */
-  height: auto;
-  height: 50px;
-  background-color: #f0f0f0; /* Cor de fundo opcional */
-  padding: 10px; /* Espaçamento interno opcional */
-  /*background-color: #E30613;*/
-  text-align: center;
-}
-
-#clock {
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 130%;
-  max-width: 160px;
-  background-color: #E30613;
-  padding: 60px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  text-align: center; /* Centraliza os elementos dentro de #content-top */
-  font-size: 2.1vw;
+#btnGreen {
+  background-color: #00b300;
   color: white;
-}
-
-#date {
-  position: fixed;
-  top: 13%; /* Ajuste conforme necessário */
-  right: calc(4% + 2.1vw); /* Ajuste conforme necessário */
-  font-size: 1.1vw; /* Ajuste conforme necessário */
-  color: whitesmoke;
-  text-align: center;
-}
-
-/* Icon roda dentada*/
-#rodaDentadaDiv{
-display:flex;
-justify-content: flex-end;
-filter:invert();
-}
-
-#rodaDentada:hover{
-  cursor: pointer;
-  animation: spin 2s linear infinite;
-}
-
-#tableRodaDentada{
-  margin-top: 0;
-}
-
- /* Estilos para linhas com report true */
-tr.report-true td {
-  background-color: #575656; /* Cor de fundo vermelha */
-  color: white; /* Cor do texto branco */
-}
-
-/* Estilos para linhas com nfa true */
-tr.nfa-true td {
-  background-color: #5756565d; /* Cor de fundo amarela */
-  color:black;
-}
-
-#popupRodadentada {
-  margin-top: 0;
-  width: 37%;
-  position: fixed;
-  z-index: 10000;
-}
-
-#popupRodadentada table {
-  width: 100%;
-  }
-
-#popupRodadentada td {
   border: none;
-  text-align: left;
-}
-
-#popupRodadentada button {
-  font-size: 15px;
-  margin-bottom: 5px;
-}
-
-#popupRodadentada select {
-  font-size: 25px;
-}
-
-#popupRodadentada .buttons-container {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 10px;
-  width: 100%;
-  position: fixed;
-  bottom: 5px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-#popupRodadentada .buttons-container button {
+  padding: 10px;
   margin: 5px;
-  height: 50px;
+  cursor: pointer;
+  width: 80%;
 }
 
-#popupRodadentada .buttons-container .button-column {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  height: 50px;
-}
-/* Campo de pesquisa*/
-
-#pesquisa{
-  vertical-align: middle;
-  font-size: 2vh;
-}
-
-#pesquisaTable{
-  width:65%;
-  display: flex;
-  justify-content: center;
-  background-color:transparent;
-  text-align: center;
-}
-
-#pesquisaTable td{
-  color:white;
-  font-size: large;
-  margin-left:0.5vw;
-  background-color: none;
-  text-align: center;
+#btnYellow {
+  background-color: #ffcc00;
+  color: black;
   border: none;
+  padding: 10px;
+  margin: 5px;
+  cursor: pointer;
+  width: 80%;
 }
 
-tr.post-start td {
-  background-color: #18cc00 ; /* Cor de fundo vermelha */
-  color: black; /* Cor do texto branco */
-}
-tr.post-slow td {
-  background-color: #d6ff07 ; /* Cor de fundo vermelha */
-  /* color: white;  *//* Cor do texto branco */
-}
-tr.post-redflag td{
+#btnRed {
   background-color: #E30613;
   color: white;
-}
-
-tr.priority-set td{
-  background-color: #e29032; /* Cor de fundo vermelha */
-  color: white; /* Cor do texto branco */
-  animation: blinks 2s  infinite;
-  transition-duration: 1s infinite; 
-  
-}
-
-/* Prioridade */
-
-@keyframes blinks {
-  0% {
-    
-    background-color:#f0f0f0; /* Define o ponto final da cor */
-    color:black;
-  }
-  
-  100% {
-    background-color: orangered; /* Define o ponto inicial da cor */
-    color: black;
-  }
+  border: none;
+  padding: 10px;
+  margin: 5px;
+  cursor: pointer;
+  width: 80%;
 }
 
 #popupConfiguracoes {
   width: 30%;
   z-index: 10001;
 }
-#popupConfiguracoes  table{
+
+#popupConfiguracoes table{
   width: 100%;
 }
-#popupConfiguracoes  td{
+
+#popupConfiguracoes td{
   border:none;
-  text-align: left;;
+  text-align: left;
 }
-#popupConfiguracoes  button{
+
+#popupConfiguracoes button{
   font-size: 20px;
   margin-bottom: 20px;
 }
@@ -633,16 +1264,341 @@ tr.priority-set td{
   z-index: 10006;
 }
 
-@media screen and (min-width: 1370px) {
-  #tabela thead{
-      top: 22.2vh;
-  }
-  #tabela{
-    margin-top: 23vh;
-  }
-}
-
 .buttaoUpDown{
   margin-bottom: 0;
   height: 5vh;
+}
+
+/* Media queries para responsividade dos botões */
+@media screen and (max-width: 1366px) {
+  #raceStart, #raceRF, #raceSF {
+    width: 200px;
+    height: 50px;
+    font-size: 14px;
+  }
+  #extraButtons {
+    width: 22%;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  #raceStart, #raceRF, #raceSF {
+    width: 180px;
+    height: 45px;
+    font-size: 13px;
+  }
+  #extraButtons {
+    width: 20%;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  #raceStart, #raceRF, #raceSF {
+    width: 160px;
+    height: 40px;
+    font-size: 12px;
+  }
+  #extraButtons {
+    width: 18%;
+  }
+}
+
+/* Media queries para responsividade do numpad e botões */
+@media screen and (min-width: 1367px) {
+  #numpad {
+    width: 18%;
+    top: 60vh;
+  }
+  #numpad-table {
+    width: 16vw;
+  }
+  .numpad-Button {
+    width: 6vw;
+    font-size: 18px;
+    padding: 10px;
+  }
+  #raceStart, #raceRF, #raceSF {
+    width: 220px;
+    height: 55px;
+    font-size: 15px;
+  }
+}
+
+@media screen and (max-width: 1366px) {
+  #numpad {
+    width: 16%;
+    top: 58vh;
+  }
+  #numpad-table {
+    width: 14vw;
+  }
+  .numpad-Button {
+    width: 5.5vw;
+    font-size: 16px;
+    padding: 8px;
+  }
+  #raceStart, #raceRF, #raceSF {
+    width: 180px;
+    height: 45px;
+    font-size: 13px;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  #numpad {
+    width: 14%;
+    top: 56vh;
+  }
+  #numpad-table {
+    width: 12vw;
+  }
+  .numpad-Button {
+    width: 4vw;
+    font-size: 14px;
+    padding: 6px;
+    margin: 2px;
+  }
+  #raceStart, #raceRF, #raceSF {
+    width: 150px;
+    height: 40px;
+    font-size: 12px;
+    padding: 8px;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  #numpad {
+    width: 20%;
+    top: 54vh;
+  }
+  #numpad-table {
+    width: 18vw;
+  }
+  .numpad-Button {
+    width: 8vw;
+    font-size: 16px;
+    padding: 8px;
+    margin: 3px;
+  }
+  #raceStart, #raceRF, #raceSF {
+    width: 90px;
+    height: 28px;
+    font-size: 10px;
+    padding: 5px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  #numpad {
+    width: 18%;
+    top: 52vh;
+  }
+  #numpad-table {
+    width: 16vw;
+    padding-top: 0.5vh;
+    padding-bottom: 0.5vh;
+  }
+  .numpad-Button {
+    width: 7vw;
+    font-size: 15px;
+    padding: 7px;
+    margin: 2px;
+    border-width: 2px;
+  }
+  #raceStart, #raceRF, #raceSF {
+    width: 75px;
+    height: 25px;
+    font-size: 9px;
+    padding: 4px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  #numpad {
+    width: 16%;
+    top: 50vh;
+  }
+  #numpad-table {
+    width: 14vw;
+  }
+  .numpad-Button {
+    width: 6vw;
+    font-size: 14px;
+    padding: 6px;
+    margin: 2px;
+    border-width: 2px;
+  }
+  #raceStart, #raceRF, #raceSF {
+    width: 65px;
+    height: 22px;
+    font-size: 8px;
+    padding: 3px;
+  }
+}
+
+@media (min-width: 768px) {
+  .popup {
+    width: 33.6%; /* Aumentado para telas médias */
+  }
+}
+
+@media (min-width: 992px) {
+  .popup {
+    width: 28.8%; /* Aumentado para telas grandes */
+  }
+}
+
+#tabela th, #tabela td {
+  border: 1px solid #ddd;
+  text-align: center; /* Centraliza texto e ícones */
+}
+
+#tabela td.obs {
+  text-align: left; /* Mantém texto da coluna de observações à esquerda */
+}
+
+#obsInputSelect, #obsInputSelect2 {
+  display: block; /* Garante que a dropdown ocupe toda a largura */
+  margin-top: 10px; /* Espaçamento acima da dropdown */
+  position: relative; /* Para garantir que a posição seja relativa ao contêiner */
+  z-index: 1000; /* Garante que a dropdown apareça acima de outros elementos */
+}
+
+/* Aumentar a largura do popup de adicionar dados em 40% em todas as escalas de tela, mantendo o popup de pesquisa no tamanho normal. */
+@media screen and (min-width: 1367px) {
+  #popupAdicionaDados {
+    width: 58.8%;
+  }
+}
+
+@media screen and (max-width: 1366px) {
+  #popupAdicionaDados {
+    width: 49%;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  #popupAdicionaDados {
+    width: 56%;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  #popupAdicionaDados {
+    width: 70%;
+  }
+}
+
+.popup button, .popup input, .popup select, .popup textarea {
+  font-size: 16px; /* Aumentar o tamanho da fonte para todos os itens do popup */
+  padding: 12px; /* Aumentar o padding para botões, inputs, selects e textarea */
+  text-align: center;
+}
+
+.popup {
+  width: 100%; /* Definir a largura do popup para 100% */
+  max-width: 1000px; /* Manter o max-width para 1000px */
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: flex-start; /* Alinha as checkboxes ao topo */
+  margin-bottom: 0px; /* Espaçamento entre checkboxes */
+}
+
+input[type='checkbox'] {
+  width: 25px; /* Tamanho do checkbox */
+  height: 25px; 
+  margin-right: 10px; /* Espaço entre o checkbox e o texto */
+  display: inline-block;
+  position: relative; /* Para alinhar o ::before */
+  appearance: none; /* Remove o estilo padrão */
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+}
+
+input[type="checkbox"]:checked::before {
+  content: "\2713"; /* Visto unicode */
+  color: red;
+  font-size: 20px; /* Tamanho do visto */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  inset: 0; /* Centraliza o conteúdo */
+}
+
+
+#opcaoCamera, #opcaoPost, #opcaoTurn {
+  width: 100px; /* Largura fixa para os botões */
+  height: 100px; /* Altura fixa para os botões */
+  border-radius: 0; /* Remover bordas arredondadas para torná-los quadrados */
+  font-size: 16px; /* Tamanho da fonte para melhor legibilidade */
+  display: inline-block; /* Coloca os botões na mesma linha */
+  margin: 0 5px; /* Margem entre os botões */
+}
+
+#button-minus1, #button-minus2, #addReport {
+  width: 100px; /* Largura fixa para todos os botões */
+  height: 100px; /* Altura fixa para todos os botões */
+  border-radius: 10px; /* Arredondar os vértices dos botões */
+  font-size: 16px; /* Tamanho da fonte para melhor legibilidade */
+  display: inline-block; /* Coloca os botões na mesma linha */
+  margin: 0 5px; /* Margem entre os botões */
+}
+
+#popupNumpadTable input[type="text"],
+#popupNumpadTable input[type="number"],
+#popupNumpadTable select {
+    max-width: 50%; /* Definir uma largura máxima menor para os campos de texto e selects */
+    width: auto; /* Largura responsiva até o máximo definido */
+    padding: 6px; /* Ajustar o padding para um tamanho mais apropriado */
+    font-size: 14px; /* Ajustar o tamanho da fonte */
+}
+
+#popupNumpadTable input[type="checkbox"] {
+    display: inline-block; /* Permite que os checkboxes fiquem em linha */
+    margin: 0 5px; /* Margem entre os checkboxes */
+    vertical-align: middle; /* Alinha verticalmente no meio */
+    width: 25px; /* Definir uma largura fixa para os checkboxes */
+    height: 25px; /* Definir uma altura fixa para os checkboxes */
+}
+
+#popupNumpadTable td {
+    text-align: center; /* Centraliza o conteúdo das células da tabela */
+}
+
+#popupNumpadTable {
+    margin: 0 auto; /* Centraliza a tabela dentro do popup */
+    text-align: center; /* Centraliza o conteúdo dentro das células da tabela */
+}
+
+#popupNumpadTable input[type="text"], #popupNumpadTable select {
+    width: 50%; /* Define a largura dos campos de texto e selects */
+    margin: 10px auto; /* Margem superior/inferior e centraliza horizontalmente */
+    display: block; /* Faz com que cada campo ocupe uma linha completa */
+}
+
+#popupNumpadTable input[type="text"] {
+    width: 50%; /* Diminuir a largura das caixas de texto */
+    display: inline-block; /* Permite que as designações fiquem ao lado */
+    margin: 5px 2px; /* Diminuir a margem entre as caixas de texto */
+}
+
+#popupNumpadTable label {
+    display: inline-block; /* Permite que os rótulos fiquem ao lado das caixas de texto */
+    width: 30%; /* Largura para os rótulos para que fiquem alinhados */
+    text-align: right; /* Alinha o texto à direita para melhor apresentação */
+    margin-right: 2px; /* Diminuir ainda mais a margem à direita dos rótulos para encostar nas caixas de texto */
+}
+
+#popupNumpadTable input[type="text"] {
+    margin: 2px 1px; /* Diminuir ainda mais a margem entre as caixas de texto */
+}
+
+#popupNumpadTable textarea {
+    width: 60%; /* Alinhar a largura da caixa de texto de observações com as outras caixas de texto */
+    margin: 2px 1px; /* Manter margem reduzida entre as caixas de texto */
+    display: inline-block; /* Permite que a caixa de texto ocupe a mesma linha que as legendas */
 }

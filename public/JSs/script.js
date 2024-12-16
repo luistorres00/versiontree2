@@ -19,7 +19,7 @@ setInterval(updateClock, 1000);
 let campoPesquisa = false;
 
 //Declarado URL's
-const url = "http://192.168.51.53:16082/";
+const url = "http://192.168.1.87:16082/";
 
 //-------------------------------------------------------DOC LISTENERS--------------------------------------------------------
 
@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const userData = JSON.parse(responseData);
   if (!responseData) {
     // Se a variável responseData não existir, redirecione o usuário para index.html
-    window.location.href = "http://192.168.51.53:5500/index.html";
+    window.location.href = "http://192.168.1.87:5500/index.html";
   }
 
   localStorage.setItem("usertype", userData.usertype);
@@ -339,7 +339,7 @@ document.addEventListener("DOMContentLoaded", function () {
     logoutButton.addEventListener("click", function () {
       // Fazer solicitação para logout
       console.log("1");
-      fetch("http://192.168.51.53:16082/auth/logout", {
+      fetch("http://192.168.1.87:16082/auth/logout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -376,7 +376,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function carregarDados() {
   // Definir o IP/URL para onde enviar os dados
-  const url = "http://192.168.51.53:16082/getData";
+  const url = "http://192.168.1.87:16082/getData";
 
   fetch(url)
     .then((response) => response.json())
@@ -404,7 +404,7 @@ function inputRace() {
   if (rname != null) {
     document.getElementById("header").innerHTML = rname;
     // Enviar o nome da corrida para o backend
-    fetch("http://192.168.51.53:16082/addRace", {
+    fetch("http://192.168.1.87:16082/addRace", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -428,7 +428,7 @@ function inputRace() {
 
 //Muda o nome da corrida para a ultima da tabela
 function updateHeaderWithLastRaceText() {
-  fetch("http://192.168.51.53:16082/getLRace")
+  fetch("http://192.168.1.87:16082/getLRace")
     .then((response) => {
       if (!response.ok) {
         throw new Error("Erro ao obter o texto da última corrida");
@@ -462,25 +462,31 @@ function limparLS() {
 
 //abre o popup
 function abrirPopup() {
-  document.getElementById("popup").style.display = "block";
+  document.getElementById("popup").style.display = "flex";
   popupAberto = true;
 }
 
 //abre o popup2
 function abrirPopup2() {
-  document.getElementById("popup2").style.display = "block";
+  document.getElementById("popup2").style.display = "flex";
   popup2Aberto = true;
 }
 
 // Abre popup numpad
 function abrirPopupNumpad() {
-  document.getElementById("popupNumpad").style.display = "block";
+  const popupNumpad = document.getElementById('popupNumpad');
+  if (popupNumpad) {
+    popupNumpad.style.display = 'flex';
+  }
   popupNumpadAberto = true;
 }
 
 // Abrir popup password
 function abrirPopupNumpadPassword() {
-  document.getElementById("numpad-password").style.display = "block";
+  const popupNumpadPassword = document.getElementById('numpad-password');
+  if (popupNumpadPassword) {
+    popupNumpadPassword.style.display = 'flex';
+  }
   popupNumpadPasswordAberto = true;
 }
 
@@ -537,14 +543,19 @@ function fecharPopup2() {
 
 // Fecha o popup Numpad
 function fecharPopupNumpad() {
-  document.getElementById("popupNumpad").style.display = "none";
-
+  const popupNumpad = document.getElementById('popupNumpad');
+  if (popupNumpad) {
+    popupNumpad.style.display = 'none';
+  }
   popupNumpadAberto = false;
 }
 
 // Fechar popup password
 function fecharPopupNumpadPassword() {
-  document.getElementById("numpad-password").style.display = "none";
+  const popupNumpadPassword = document.getElementById('numpad-password');
+  if (popupNumpadPassword) {
+    popupNumpadPassword.style.display = 'none';
+  }
   popupNumpadPasswordAberto = false;
 }
 
@@ -600,7 +611,7 @@ function getData() {
     return Promise.resolve(null); // Retorna uma promessa resolvida com null se algum popup estiver aberto
   }
 
-  const url = "http://192.168.51.53:16082/getData";
+  const url = "http://192.168.1.87:16082/getData";
 
   return fetch(url)
     .then((response) => response.json())
@@ -666,31 +677,31 @@ function updateClock() {
 
 // Na página de cliente, troca a exibição da Tabela para o Numpad
 function trocarParaNumpad() {
-  const tabela = document.getElementById("tabela");
+  const tableContainer = document.querySelector('.table-container');
   const tabelaIcon = document.getElementById("iconTabela");
   const numpad = document.getElementById("numpad");
   const numpadIcon = document.getElementById("iconNumpad");
   const headerText = document.getElementById("currentOptionHeader");
 
   headerText.textContent = "List:";
-  tabela.classList.add("hidden");
+  tableContainer.style.display = "none";
   tabelaIcon.classList.remove("hidden");
-  numpad.classList.remove("hidden");
+  numpad.style.display = "block";
   numpadIcon.classList.add("hidden");
 }
 
 // Na página de cliente, troca a exibição do Numpad para a Tabela
 function trocarParaTabela() {
-  const tabela = document.getElementById("tabela");
+  const tableContainer = document.querySelector('.table-container');
   const tabelaIcon = document.getElementById("iconTabela");
   const numpad = document.getElementById("numpad");
   const numpadIcon = document.getElementById("iconNumpad");
   const headerText = document.getElementById("currentOptionHeader");
 
   headerText.textContent = "Numpad:";
-  tabela.classList.remove("hidden");
+  tableContainer.style.display = "block";
   tabelaIcon.classList.add("hidden");
-  numpad.classList.add("hidden");
+  numpad.style.display = "none";
   numpadIcon.classList.remove("hidden");
 }
 
@@ -831,7 +842,7 @@ function enviarJson() {
   console.log(localStorageData);
 
   // Definir o IP/URL para onde enviar os dados
-  const url = "http://192.168.51.53:16082/addData";
+  const url = "http://192.168.1.87:16082/addData";
 
   // Verificar se existem dados no localStorage
   if (localStorageData) {
@@ -935,7 +946,7 @@ function envUpJson() {
     // Define o ID do documento a ser atualizado (obtido do localStorage)
     const id = updatedData._id;
     // Definir o IP/URL para onde enviar os dados
-    const url = `http://192.168.51.53:16082/updateData/${id}`;
+    const url = `http://192.168.1.87:16082/updateData/${id}`;
     // Envia os dados atualizados para o servidor
     fetch(url, {
       method: "PUT",
@@ -970,7 +981,7 @@ function deleteLinha() {
   // Verifica se o ID está disponível nos detalhes
   if (detalhes && detalhes._id) {
     // Faz uma solicitação DELETE para excluir a linha com o ID especificado
-    fetch(`http://192.168.51.53:16082/dropData/${detalhes._id}`, {
+    fetch(`http://192.168.1.87:16082/dropData/${detalhes._id}`, {
       method: "DELETE",
     })
       .then((response) => {
@@ -1156,7 +1167,7 @@ function limparTabela() {
   }
 
   // Definir o IP/URL para onde enviar os dados
-  const url = "http://192.168.51.53:16082/dropData";
+  const url = "http://192.168.1.87:16082/dropData";
 
   fetch(url, {
     method: "POST",
@@ -1167,8 +1178,7 @@ function limparTabela() {
     .then((response) => response.json())
     .then((data) => {
       location.reload;
-      console.log(data.message);
-      fecharPopupRodaDentada(); // Mensagem retornada pelo servidor
+      console.log(data.message); // Mensagem retornada pelo servidor
     })
     .catch((error) => {
       console.error("Erro ao apagar dados:", error);
@@ -1232,7 +1242,7 @@ function enviarJsonNumpad() {
   const localStorageData = localStorage.getItem("novoNumpadNum");
 
   // Definir o IP/URL para onde enviar os dados
-  const url = "http://192.168.51.53:16082/addDataNumpad";
+  const url = "http://192.168.1.87:16082/addDataNumpad";
 
   // Verificar se existem dados no localStorage
   if (localStorageData) {
@@ -1294,7 +1304,7 @@ function envUpNumpadJson() {
     // Define o ID do documento a ser atualizado (obtido do localStorage)
     const id = updatedData._id;
     // Definir o IP/URL para onde enviar os dados
-    const url = `http://192.168.51.53:16082/updateNumpad/${id}`;
+    const url = `http://192.168.1.87:16082/updateNumpad/${id}`;
     // Envia os dados atualizados para o servidor
     console.log(updatedData);
     fetch(url, {
@@ -1325,7 +1335,7 @@ function envUpNumpadJson() {
 // Dar reset ao numero de numpad
 function eliminarNumpadNum() {
   // Definir o IP/URL para onde enviar os dados
-  const url = "http://192.168.51.53:16082/dropDataNumpad";
+  const url = "http://192.168.1.87:16082/dropDataNumpad";
 
   fetch(url, {
     method: "POST",
@@ -1815,7 +1825,7 @@ function generatePositionButtons(detalhes) {
   popupEdit.appendChild(buttonUp);
   popupEdit.appendChild(buttonDown);
 }
-// Adicionadar o evento de editar a hora
+// Adicionar o evento de editar a hora
 function editarHora() {
   const celulaHora = event.target;
   celulaHora.setAttribute("contenteditable", "true");
@@ -1931,7 +1941,7 @@ function moveUp(button) {
       data.forEach((item) => {
         // Ciclo para encontrar os dados da linha anterior
         if (item._id == idLinhaAnterior) {
-          LinhaDados2 = { ...item }; // Ir buscar dados da linha anterior
+          LinhaDados2 = { ...item };
         }
       });
 
@@ -1954,7 +1964,7 @@ function moveUp(button) {
         }
         if (item._id == LinhaDados2._id) {
           //Vai buscar o objecto com o mesmo e ID e substituir pelos contéudos do qual pretende trocar
-
+          item.corrida = LinhaDados1.corrida;
           item.camera = LinhaDados1.camera;
           item.curva = LinhaDados1.curva;
           item.hora = LinhaDados1.hora;
@@ -2058,8 +2068,7 @@ function updatePosition() {
     // Define o ID do documento a ser atualizado (obtido do localStorage)
     const id = updatedData1._id;
     // Definir o IP/URL para onde enviar os dados
-    const url = `http://192.168.51.53:16082/updateData/${id}`;
-
+    const url = `http://192.168.1.87:16082/updateData/${id}`;
     // Envia os dados atualizados para o servidor
     fetch(url, {
       method: "PUT",
@@ -2089,7 +2098,7 @@ function updatePosition() {
     const id2 = updatedData2._id;
 
     // Definir o IP/URL para onde enviar os dados
-    const url2 = `http://192.168.51.53:16082/updateData/${id2}`;
+    const url2 = `http://192.168.1.87:16082/updateData/${id2}`;
 
     // Envia os dados atualizados para o servidor
     fetch(url2, {
@@ -2170,7 +2179,7 @@ function resetCorridas() {
 // Carregar opções para Obs
 function carregarObsOptions() {
   // Definir o IP/URL para onde enviar os dados
-  const url = "http://192.168.51.53:16082/getObsOptions";
+  const url = "http://192.168.1.87:16082/getObsOptions";
 
   fetch(url)
     .then((response) => response.json())
@@ -2200,7 +2209,7 @@ function enviarObsOptionJson() {
   console.log(localStorageData);
 
   // Definir o IP/URL para onde enviar os dados
-  const url = "http://192.168.51.53:16082/addObsOptions";
+  const url = "http://192.168.1.87:16082/addObsOptions";
 
   // Verificar se existem dados no localStorage
   if (localStorageData) {
@@ -2242,4 +2251,152 @@ function atualizarObsOptions(data) {
     option.textContent = item.descricao;
     selectOBSUpdate.appendChild(option);
   });
+}
+
+// Function to adjust the time input by a specified number of minutes
+// Used by buttons in the popup to subtract time
+function adjustTime(minutes) {
+  // Get the current time input value
+  const timeInput = document.getElementById('horainput');
+  let currentTime = timeInput.value;
+
+  // If the time input has a value
+  if (currentTime) {
+    // Split the time into hours, minutes, and seconds
+    const timeParts = currentTime.split(':');
+    let hours = parseInt(timeParts[0], 10);
+    let mins = parseInt(timeParts[1], 10);
+    const seconds = parseInt(timeParts[2], 10);
+
+    // Add the specified number of minutes to the current time
+    mins += minutes;
+
+    // If the minutes are less than 0, subtract 1 from the hours and add 60 to the minutes
+    if (mins < 0) {
+      hours -= 1;
+      mins += 60;
+    }
+
+    // If the hours are less than 0, set them to 23
+    if (hours < 0) {
+      hours = 23;
+    }
+
+    // Format the time to HH:MM:SS
+    const adjustedTime = `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+    // Update the time input value
+    timeInput.value = adjustedTime;
+  }
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  const buttonMinus1Lap = document.getElementById("buttonMinus1Lap"); // ID do botão -1 Lap
+  const buttonMinus2Laps = document.getElementById("buttonMinus2Laps"); // ID do botão -2 Laps
+
+  buttonMinus1Lap.addEventListener("click", function () {
+    console.log("Botão -1 Lap clicado"); // Log para verificar se o botão foi clicado
+    const obsInput = document.getElementById("obsinput");
+    if (obsInput) {
+      obsInput.value += " -1 Lap"; // Atualiza o campo de observações
+    }
+  });
+
+  buttonMinus2Laps.addEventListener("click", function () {
+    console.log("Botão -2 Laps clicado"); // Log para verificar se o botão foi clicado
+    const obsInput = document.getElementById("obsinput");
+    if (obsInput) {
+      obsInput.value += " -2 Laps"; // Atualiza o campo de observações
+    }
+  });
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+  const buttonMinus1Lap = document.getElementById("buttonMinus1Lap");
+  const buttonMinus2Laps = document.getElementById("buttonMinus2Laps");
+
+  buttonMinus1Lap.addEventListener("click", function () {
+    const obsInput = document.getElementById("obsinput");
+    if (obsInput) {
+      obsInput.value += " -1 Lap";
+    } else {
+      console.error("Textarea com ID 'obsinput' não encontrada.");
+    }
+  });
+
+  buttonMinus2Laps.addEventListener("click", function () {
+    const obsInput = document.getElementById("obsinput");
+    if (obsInput) {
+      obsInput.value += " -2 Laps";
+    } else {
+      console.error("Textarea com ID 'obsinput' não encontrada.");
+    }
+  });
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+  const buttonMinus1Lap = document.getElementById("buttonMinus1Lap");
+  const buttonMinus2Laps = document.getElementById("buttonMinus2Laps");
+
+  buttonMinus1Lap.addEventListener("click", function () {
+    const obsInput = document.getElementById("obsinput");
+    if (obsInput) {
+      obsInput.value += " -1 Lap";
+    } else {
+      console.error("Textarea com ID 'obsinput' não encontrada.");
+    }
+  });
+
+  buttonMinus2Laps.addEventListener("click", function () {
+    const obsInput = document.getElementById("obsinput");
+    if (obsInput) {
+      obsInput.value += " -2 Laps";
+    } else {
+      console.error("Textarea com ID 'obsinput' não encontrada.");
+    }
+  });
+});
+document.addEventListener("DOMContentLoaded", function () {
+    // Seu código existente...
+
+    // Adiciona ouvintes de eventos para os botões
+    const buttonMinus1Lap = document.getElementById("buttonMinus1Lap");
+    const buttonMinus2Laps = document.getElementById("buttonMinus2Laps");
+
+    buttonMinus1Lap.addEventListener("click", function () {
+        const obsInput = document.getElementById("obsinput");
+        if (obsInput) {
+            obsInput.value += " -1 Lap"; // Adiciona -1 Lap ao campo de observações
+        } else {
+            console.error("Textarea com ID 'obsinput' não encontrada.");
+        }
+    });
+
+    buttonMinus2Laps.addEventListener("click", function () {
+        const obsInput = document.getElementById("obsinput");
+        if (obsInput) {
+            obsInput.value += " -2 Laps"; // Adiciona -2 Laps ao campo de observações
+        } else {
+            console.error("Textarea com ID 'obsinput' não encontrada.");
+        }
+    });
+});
+
+let selectedValues = [];
+
+// Função para lidar com a seleção da câmera
+function handleCameraSelection(value) {
+    selectedValues.push(value); // Adiciona o novo valor ao array
+    // Lógica para lidar com a seleção da câmera
+}
+
+// Função para lidar com a seleção da curva
+function handleCurveSelection(value) {
+    selectedValues.push(value); // Adiciona o novo valor ao array
+    // Lógica para lidar com a seleção da curva
+}
+
+// Função para obter todas as seleções
+function getSelectedValues() {
+    return selectedValues.join(", "); // Retorna as seleções como string
 }

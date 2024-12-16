@@ -1,0 +1,73 @@
+// Sistema de gerenciamento de scroll
+let lastKnownScrollPosition = 0;
+let ticking = false;
+
+document.addEventListener("DOMContentLoaded", function () {
+    const tabela = document.getElementById('tabela');
+    const thead = tabela.querySelector('thead');
+    const contentTop = document.getElementById('content-top');
+    const tbody = tabela.querySelector('tbody');
+    
+    // Salvar posição do scroll no localStorage sempre que o usuário rolar
+    tabela.addEventListener('scroll', function(e) {
+        lastKnownScrollPosition = tabela.scrollTop;
+        localStorage.setItem('tableScrollPosition', lastKnownScrollPosition);
+    });
+
+    // Restaurar posição do scroll quando houver mudanças na tabela
+    const observer = new MutationObserver(function(mutations) {
+        if (!ticking) {
+            window.requestAnimationFrame(function() {
+                const savedPosition = localStorage.getItem('tableScrollPosition');
+                if (savedPosition !== null) {
+                    tabela.scrollTop = parseInt(savedPosition);
+                }
+                ticking = false;
+            });
+            ticking = true;
+        }
+    });
+
+    // Observar mudanças na tabela
+    observer.observe(tabela, {
+        childList: true,
+        subtree: true,
+        characterData: true,
+        attributes: true
+    });
+
+    // Restaurar posição do scroll quando a página carregar
+    window.addEventListener('load', function() {
+        const savedPosition = localStorage.getItem('tableScrollPosition');
+        if (savedPosition !== null) {
+            window.requestAnimationFrame(function() {
+                tabela.scrollTop = parseInt(savedPosition);
+            });
+        }
+    });
+
+    // Função para ajustar o scroll da tabela
+    function adjustTableScroll() {
+        const contentTopBottom = contentTop.getBoundingClientRect().bottom;
+        const theadTop = thead.getBoundingClientRect().top;
+        
+        if (tbody.getElementsByTagName('tr').length === 0) {
+            thead.style.top = (contentTopBottom - 250) + 'px';
+        } else {
+            thead.style.top = contentTopBottom + 'px';
+        }
+        
+        if (theadTop <= contentTopBottom) {
+            tabela.style.height = 'calc(100vh - 100px)';
+            tabela.style.overflowY = 'auto';
+            document.body.style.overflow = 'hidden';
+        } else {
+            tabela.style.height = '';
+            tabela.style.overflowY = 'hidden';
+            document.body.style.overflow = 'auto';
+        }
+    }
+
+    window.addEventListener('scroll', adjustTableScroll);
+    adjustTableScroll();
+});
