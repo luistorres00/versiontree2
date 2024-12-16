@@ -1866,7 +1866,7 @@ function adicionarCameraOrPost(opcao) {
 
 //Verificar password dar input de curvas
 function checkPassword() {
-  numpadPassword = "WFR2012";
+  numpadPassword = "wfr2019.";
   if (document.getElementById("numpadUnlock").value == numpadPassword) {
     adicionarNumpadNum();
     generateNumpad();
@@ -2400,3 +2400,53 @@ function handleCurveSelection(value) {
 function getSelectedValues() {
     return selectedValues.join(", "); // Retorna as seleções como string
 }
+// Função para incrementar o número da corrida ao pressionar a tecla "P"
+function incrementarNumeroCorrida() {
+  // Adiciona um listener para o evento de tecla pressionada
+  document.addEventListener("keydown", function (e) {
+      // Verifica se a tecla pressionada é "P" ou "p"
+      if (e.key === "p" || e.key === "P") {
+          // Obtém o número da corrida atual do localStorage
+          let corridaNumber = Number(localStorage.getItem("numCorridas"));
+
+          // Se não houver um número de corrida armazenado, inicializa como 0
+          if (isNaN(corridaNumber)) {
+              corridaNumber = 0;
+          }
+
+          // Incrementa o número da corrida
+          corridaNumber++;
+
+          // Armazena o novo número da corrida no localStorage
+          localStorage.setItem("numCorridas", corridaNumber);
+
+          // Exibe o novo número da corrida (opcional)
+          console.log("Corrida nº: " + corridaNumber);
+      }
+  });
+}
+
+// Chama a função para ativar o listener
+incrementarNumeroCorrida();
+// Adiciona um listener para o evento de tecla pressionada
+document.addEventListener("keydown", function (e) {
+  // Verifica se a tecla pressionada é "P" ou "p"
+  if (e.key === "p" || e.key === "P") {
+      // Obtém o número da corrida atual do localStorage
+      let corridaNumber = Number(localStorage.getItem("numCorridas"));
+
+      // Se não houver um número de corrida armazenado, inicializa como 0
+      if (isNaN(corridaNumber)) {
+          corridaNumber = 0;
+      }
+
+      // Incrementa o número da corrida
+      corridaNumber++;
+
+      // Armazena o novo número da corrida no localStorage
+      localStorage.setItem("numCorridas", corridaNumber);
+
+      // Exibe o novo número da corrida (opcional)
+      console.log("Corrida nº: " + corridaNumber);
+  }
+});

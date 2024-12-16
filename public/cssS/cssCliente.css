@@ -278,6 +278,7 @@ td[data-report="true"] {
   border: 1px solid #ddd;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   white-space: nowrap;
+  z-index: 10; /* Aumentar z-index para ficar acima dos checkboxes */
 }
 
 #tabela th {
@@ -575,6 +576,8 @@ tr.highlight {
   padding: 10px; /* Espaçamento interno opcional */
   /*background-color: #E30613;*/
   text-align: center;
+  margin-top: 30px; /* Adiciona espaço acima dos checkboxes */
+  z-index: 5; /* Certifique-se de que o menu esteja abaixo do thead */
 }
 
 .time-container {
@@ -1018,8 +1021,8 @@ input[type="checkbox"] {
   -webkit-appearance: none;
   -moz-appearance: none;
   /* Definindo um tamanho padrão para a checkbox */
-  width: 25px;  /* Ajustado para 25px */
-  height: 25px; /* Ajustado para 25px */
+  width: 20px;
+  height: 20px;
   /* Definindo o fundo branco */
   background-color: white;
   /* Adicionando uma borda */
@@ -1029,19 +1032,16 @@ input[type="checkbox"] {
   /* Posicionando o texto ao lado da checkbox */
   vertical-align: middle;
   margin-right: 5px; /* Espaço entre a checkbox e o texto */
-  display: inline-block; /* Garantir que a checkbox se comporte como um bloco inline */
-}
-
-/* Estilizando a marcação quando a checkbox está marcada */
-input[type="checkbox"]:checked::before {
+  }
+  
+  /* Estilizando a marcação quando a checkbox está marcada */
+  input[type="checkbox"]:checked::before {
   /* Adicionando um visto vermelho */
   content: "\2713"; /* Código unicode para visto */
   color: red; /* Cor do visto */
-  font-size: 20px; /* Ajusta o tamanho do visto */
-  line-height: 25px; /* Alinhamento vertical ajustado para 25px */
-  position: relative;
-  top: -2px; /* Ajusta a posição vertical do visto */
-}
+  font-size: 25px; /* Tamanho do visto */
+  line-height: 20px;
+  }
 
 /* Estilo para o texto All Races */
 #pesquisaCorrida option {
@@ -1504,24 +1504,28 @@ input[type="checkbox"]:checked::before {
   display: flex;
   align-items: flex-start; /* Alinha as checkboxes ao topo */
   margin-bottom: 0px; /* Espaçamento entre checkboxes */
+  margin-top: 20px; /* Adiciona espaço acima dos checkboxes */
 }
 
 input[type='checkbox'] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
   width: 25px; /* Tamanho do checkbox */
-  height: 25px; 
-  margin-right: 10px; /* Espaço entre o checkbox e o texto */
-  display: inline-block;
-  position: relative; /* Para alinhar o ::before */
-  appearance: none; /* Remove o estilo padrão */
-  border: 2px solid #ccc;
-  border-radius: 4px;
+  height: 25px;
   background-color: white;
+  border: 1px solid #ccc;
+  vertical-align: middle;
+  margin-right: 5px;
+  position: relative;
+  z-index: 1;
+  top: -5px;
 }
 
 input[type="checkbox"]:checked::before {
   content: "\2713"; /* Visto unicode */
   color: red;
-  font-size: 20px; /* Tamanho do visto */
+  font-size: 25px; /* Tamanho do visto */
   display: flex;
   justify-content: center;
   align-items: center;
