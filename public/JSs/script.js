@@ -132,43 +132,47 @@ document.addEventListener("keydown", function (e) {
 });
 
 //
-document.addEventListener("keydown", function (e) {
-  if (
-    popupAberto == false &&
-    popup2Aberto == false &&
-    popupNumpadAberto == false &&
-    popupNumpadPasswordAberto == false &&
-    popupRodaDentada == false &&
-    popupConfiguracoes == false &&
-    campoPesquisa == false
-  ) {
-    const corridaNumber = Number(localStorage.getItem("numCorridas"));
-    const userType = localStorage.getItem("usertype");
-    let corrida;
+document.addEventListener("keydown", function (e) { 
+  if ( 
+    popupAberto == false && 
+    popup2Aberto == false && 
+    popupNumpadAberto == false && 
+    popupNumpadPasswordAberto == false && 
+    popupRodaDentada == false && 
+    popupConfiguracoes == false && 
+    campoPesquisa == false 
+  ) { 
+    const corridaNumber = Number(localStorage.getItem("numCorridas")); 
+    const userType = localStorage.getItem("usertype"); 
+    let corrida; 
 
-    if (corridaNumber != null || corridaNumber != "") {
-      corrida = corridaNumber;
-    } else {
-      corrida = 1;
-    }
-    if (document.readyState == "complete" && userType != "user") {
-      setTimeout(() => {
-        if (e.key === "p" || e.key === "P") {
-          document.getElementById("curvaInput").value = "Start";
-          obterHoraAtual();
-          adicionarLinha();
-        } else if (e.key === "r" || e.key === "R") {
-          document.getElementById("curvaInput").value = "Red Flag";
-          obterHoraAtual();
-          adicionarLinha();
-        } else if (e.key === "s" || e.key === "S") {
-          document.getElementById("curvaInput").value = "Slow Flag";
-          obterHoraAtual();
-          adicionarLinha();
-        }
-      }, 300);
-    }
-  }
+    if (corridaNumber != null || corridaNumber != "") { 
+      corrida = corridaNumber; 
+    } else { 
+      corrida = 1; 
+    } 
+    if (document.readyState == "complete" && userType != "user") { 
+      setTimeout(() => { 
+        if (e.key === "p" || e.key === "P") { 
+          // Incrementa o número da corrida para a próxima
+          corrida += 1; 
+          document.getElementById("curvaInput").value = "Start"; 
+          obterHoraAtual(); 
+          adicionarLinha(); 
+          // Atualiza o número da corrida no localStorage
+          localStorage.setItem("numCorridas", corrida); 
+        } else if (e.key === "r" || e.key === "R") { 
+          document.getElementById("curvaInput").value = "Red Flag"; 
+          obterHoraAtual(); 
+          adicionarLinha(); 
+        } else if (e.key === "s" || e.key === "S") { 
+          document.getElementById("curvaInput").value = "Slow Flag"; 
+          obterHoraAtual(); 
+          adicionarLinha(); 
+        } 
+      }, 300); 
+    } 
+  } 
 });
 
 //
@@ -805,13 +809,13 @@ function adicionarLinha() {
     ) {
       window.alert("Race Restarted");
       console.log("DD");
-    } else {
+    } //else {
       // Se a última linha não estiver marcada como "Red Flag", aplicar a condição
-      if (curva === "Start" && arrayCorridas.includes(Number(corrida))) {
-        window.alert("You can't start a race twice!");
-        return;
-      }
-    }
+      //if (curva === "Start" && arrayCorridas.includes(Number(corrida))) {
+       // window.alert("You can't start a race twice!");
+        //return;
+      //}
+    //}
   }
 
   // Armazenar os dados no localStorage
@@ -2334,119 +2338,3 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-document.addEventListener("DOMContentLoaded", function () {
-  const buttonMinus1Lap = document.getElementById("buttonMinus1Lap");
-  const buttonMinus2Laps = document.getElementById("buttonMinus2Laps");
-
-  buttonMinus1Lap.addEventListener("click", function () {
-    const obsInput = document.getElementById("obsinput");
-    if (obsInput) {
-      obsInput.value += " -1 Lap";
-    } else {
-      console.error("Textarea com ID 'obsinput' não encontrada.");
-    }
-  });
-
-  buttonMinus2Laps.addEventListener("click", function () {
-    const obsInput = document.getElementById("obsinput");
-    if (obsInput) {
-      obsInput.value += " -2 Laps";
-    } else {
-      console.error("Textarea com ID 'obsinput' não encontrada.");
-    }
-  });
-});
-document.addEventListener("DOMContentLoaded", function () {
-    // Seu código existente...
-
-    // Adiciona ouvintes de eventos para os botões
-    const buttonMinus1Lap = document.getElementById("buttonMinus1Lap");
-    const buttonMinus2Laps = document.getElementById("buttonMinus2Laps");
-
-    buttonMinus1Lap.addEventListener("click", function () {
-        const obsInput = document.getElementById("obsinput");
-        if (obsInput) {
-            obsInput.value += " -1 Lap"; // Adiciona -1 Lap ao campo de observações
-        } else {
-            console.error("Textarea com ID 'obsinput' não encontrada.");
-        }
-    });
-
-    buttonMinus2Laps.addEventListener("click", function () {
-        const obsInput = document.getElementById("obsinput");
-        if (obsInput) {
-            obsInput.value += " -2 Laps"; // Adiciona -2 Laps ao campo de observações
-        } else {
-            console.error("Textarea com ID 'obsinput' não encontrada.");
-        }
-    });
-});
-
-let selectedValues = [];
-
-// Função para lidar com a seleção da câmera
-function handleCameraSelection(value) {
-    selectedValues.push(value); // Adiciona o novo valor ao array
-    // Lógica para lidar com a seleção da câmera
-}
-
-// Função para lidar com a seleção da curva
-function handleCurveSelection(value) {
-    selectedValues.push(value); // Adiciona o novo valor ao array
-    // Lógica para lidar com a seleção da curva
-}
-
-// Função para obter todas as seleções
-function getSelectedValues() {
-    return selectedValues.join(", "); // Retorna as seleções como string
-}
-// Função para incrementar o número da corrida ao pressionar a tecla "P"
-function incrementarNumeroCorrida() {
-  // Adiciona um listener para o evento de tecla pressionada
-  document.addEventListener("keydown", function (e) {
-      // Verifica se a tecla pressionada é "P" ou "p"
-      if (e.key === "p" || e.key === "P") {
-          // Obtém o número da corrida atual do localStorage
-          let corridaNumber = Number(localStorage.getItem("numCorridas"));
-
-          // Se não houver um número de corrida armazenado, inicializa como 0
-          if (isNaN(corridaNumber)) {
-              corridaNumber = 0;
-          }
-
-          // Incrementa o número da corrida
-          corridaNumber++;
-
-          // Armazena o novo número da corrida no localStorage
-          localStorage.setItem("numCorridas", corridaNumber);
-
-          // Exibe o novo número da corrida (opcional)
-          console.log("Corrida nº: " + corridaNumber);
-      }
-  });
-}
-
-// Chama a função para ativar o listener
-incrementarNumeroCorrida();
-// Adiciona um listener para o evento de tecla pressionada
-document.addEventListener("keydown", function (e) {
-  // Verifica se a tecla pressionada é "P" ou "p"
-  if (e.key === "p" || e.key === "P") {
-      // Obtém o número da corrida atual do localStorage
-      let corridaNumber = Number(localStorage.getItem("numCorridas"));
-
-      // Se não houver um número de corrida armazenado, inicializa como 0
-      if (isNaN(corridaNumber)) {
-          corridaNumber = 0;
-      }
-
-      // Incrementa o número da corrida
-      corridaNumber++;
-
-      // Armazena o novo número da corrida no localStorage
-      localStorage.setItem("numCorridas", corridaNumber);
-
-      // Exibe o novo número da corrida (opcional)
-      console.log("Corrida nº: " + corridaNumber);
-  }
-});

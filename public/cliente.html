@@ -1,39 +1,45 @@
 <link rel="icon" href="images/wfrLogo.jpg" type="image/x-icon">
 <link rel="shortcut icon" href="images/wfrLogo.jpg" type="image/x-icon">
-<link rel="stylesheet" href="cssS/cssCliente.css">
+<link rel="stylesheet" href="cssS/css.css">
+<link rel="manifest" href="pwa/manifest.json" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script src="JSs/exceljs.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/express"></script>
 
 <script src="JSs/script.js"></script>
-<script src="JSs/tableScrollCliente.js"></script>
 <script src="JSs/scriptslogin.js"></script>
 <script src="server.js"></script>
+<script src="JSs/expexcell.js"></script>
+<script src="JSs/tableScroll.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/exceljs/dist/exceljs.min.js"></script>
-<body onload="">
-<img id="logo" src="images/unnamed.png" alt="Logo" onclick="showInstallPrompt()">
+<body>
+<img id="logo" src="images/unnamed.png" alt="Logo">
 
 <div id="content-top">
-  <!-- Adicionadar o cabeçalho da corrida -->
-  <h1 id="headerCliente">FFSA Championnat de France- La Hague 23-24 March</h1>
-  <table id="pesquisaTable">
-    <tr>
-      <td id="pesquisaObs">
-        <input type="text" id="pesquisa" maxlength="20" onkeyup="pesquisarTabelaPost()" placeholder="Search here" />
-        <img src="images/pesquisaGif.png" id="filtroImg" onclick="carregarOpcoesCorrida();abrirPopupFiltros();mudaPesquisa()"/>
-        <label for="pesquisa" id="searchFiltro"></label><label id="searchCorrida"></label>
-      </td>
-    </tr>
-    <tr>
-     <!-- <td>
-        <p id="currentOptionHeader">Numpad:</p>
-        <img id="iconNumpad" src="images/numpad.png" onclick="trocarParaNumpad()">
-        <img id="iconTabela"src="images/tabela.png" onclick="trocarParaTabela()" class="hidden">
-      </td> -->
-    </tr>
-  </table>
-  <div id ="rodaDentadaDiv" >
-    <img id="rodaDentada" src="images/roda dentada.png" onclick="abrirPopupRodaDentada()"/>
-  </div>
+    <!-- Adicionadar o cabeçalho da corrida -->
+    <h1 id="header">FFSA Championnat de France Junior- Le Mans 5-7 April</h1>
+ 
+    <table id="pesquisaTable">
+      <tr>
+        <td colspan="2">
+          <!--<p>Pesquisa:</p> -->
+        </td>
+      </tr>
+      <tr>
+        <td id="pesquisaObs">
+          <input type="text" id="pesquisa" maxlength="20" onkeyup="pesquisarTabelaPost()" placeholder="Search here" />
+          <img src="images/pesquisaGif.png" id="filtroImg" onclick="carregarOpcoesCorrida(); abrirPopupFiltros(); mudaPesquisa();"/>
+          <label for="pesquisa" id="searchFiltro"></label><label id="searchCorrida"></label>
+        </td>
+      </tr>
+    </table>
+    <div id ="rodaDentadaDiv" >
+      <img id="rodaDentada" src="images/roda dentada.png" onclick="abrirPopupRodaDentada()"/>
+    </div>
 </div>
+
+<div id="content-wrapper"></div>
 
 <div id="clock-date-container">
   <div id="clock">12:45</div>
@@ -46,44 +52,49 @@
   <table id="tabela">
       <thead>
           <tr>
-            <th id="thcolor" class="hidden">Id</th>
-            <th id="thcolor">Camera</th>
-            <th id="thcolor">Turn/Post</th>
-            <th id="thcolor" class="hora-editavel" onclick="editarHora()">Time</th>
-            <th id="thcolor">Vídeo</th>
-            <th id="thcolor">Report</th>
-            <th id="thcolor">N.F.A.</th>
-            <th id="thcolorObs">Obs</th>
-            <th id="tdlg">Edit</th>
-            <th id ="hcolor" class="hidden">Posição</th>
-            <th id="thcolorCorrida" class="hidden">Race</th>
+              <th id="thcolor" class="hidden">Id</th>
+              <th id="thcolor">Camera</th>
+              <th id="thcolor">Turn/Post</th>
+              <th id="thcolor" class="hora-editavel" onclick="editarHora()">Time</th>
+              <th id="thcolor">Vídeo</th>
+              <th id="thcolor">Report</th>
+              <th id="thcolor">N.F.A.</th>
+              <th id="thcolorObs">Obs</th>
+              <th id="tdlg">Edit</th>
+              <th id ="hcolor" class="hidden">Posição</th>
+              <th id="thcolorCorrida" class="hidden">Race</th>
           </tr>
       </thead>
       <tbody>
-          
+           
       </tbody>
   </table>
 </div>
-
-<!--Protótipo numpad(instantâneo) em comentário (É necessário descomentar a função AdicionarLinha() dentro das funções obterCurvaNum() e obterStartOrRF)-->
+<!---
+<div id="extraButtons">
+  <button class="numpad-Button" onclick="abrirPopup(); obterHoraAtual();obterStartOrRF('RF')" id="raceRF" value="Red Flag">Red Flag (R)</button></br>
+  <button class="numpad-Button" onclick="abrirPopup(); obterHoraAtual();obterStartOrRF('SF')" id="raceSF" value="Slow Flag">Slow (S)</button></br>
+  <button class="numpad-Button" onclick="abrirPopup(); obterHoraAtual(); obterStartOrRF('Start')" id="raceStart" value="Start">Start (P)</button></br>  
+</div>-->
 
 <!--Protótipo numpad em comentário (Com pop up)-->
-<div id="numpad"> 
-</div> 
+<div id ="numpad">
+  <!--<button id="botao-numpad-voltar" onclick ="window.open('/cliente.html')">Cliente</button> -->
+</div>
 
 <div id="popupRodadentada" class="popup">
   <div class="popup-content">
-    <table>
+    <span class="close" onclick="fecharPopupRodaDentada()">&times;</span>
+    <table id="tableRodaDentada">
       <tr>
         <td colspan="2">
-          <span class="close" onclick="fecharPopupRodaDentada()">&times;</span>
-          <input type="number" id="numberCurvas" placeholder="Camera Number" value="" class="hidden" style="text-align: center;font-size: 20px;width: 155px;">
-          <input type="number" id="numberCorrida" placeholder="Numero de corrida" value="" class="hidden">
+          <button id="logoutButton">Logout</button>
         </td>
       </tr>
       <tr>
         <td colspan="2">
-          <button id="logoutButton">Logout</button>
+          <input type="number" id="numberCurvas" placeholder="Camera number" value="" style="text-align: center;font-size: 20px;width: 155px;">&nbsp;<label>Numpad nº</label>
+          <input type="number" id="numberCorrida" placeholder="Lap number" value="">&nbsp;<label>Race nº</label>
         </td>
       </tr>
     </table>
@@ -99,8 +110,9 @@
   </div>
 
 </div>
-<!-- Pop up Camera select -->
-<!--div id="popupNumpad" class="popup">
+
+<!-- Pop up Camera select 
+<div id="popupNumpad" class="popup">
   <div class="popup-content">
     <span class="close" onclick="fecharPopupNumpad()">&times;</span>
     <table id="popupNumpadTable">
@@ -109,7 +121,7 @@
           <button class="primary-numpad-Button" onclick="adicionarCameraOrPost('Camera');fecharPopupNumpad()" id="opcaoCamera" value="Cam">Camera</button>
         </td>
         <td>
-          <button class="primary-numpad-Button" onclick="adicionarCameraOrPost('Post');fecharPopupNumpad()" id="opcaoPost" value="P">Post</button>
+          <button class="primary-numpad-Button" onclick="adicionarCameraOrPost('Post');fecharPopupNumpad()" id="opcaoPost" value="Post">Post</button>
         </td>
         <td>
           <button class="primary-numpad-Button" onclick="adicionarCameraOrPost('Turn');fecharPopupNumpad()" id="opcaoTurn" value="Turn">Turn</button>
@@ -117,8 +129,138 @@
       </tr>
     </table>
   </div>
+</div> -->
+
+<!-- PopUp para adicionar dados -->
+<div id="popup" class="popup" onload="limparLS()">
+    <div class="popup-content">
+      <span class="close" onclick="fecharPopup()">&times;</span>
+      <table id="popupNumpadTable">
+        <tr>
+          <td colspan="3" class="button-container">
+            <div>
+              <button class="primary-numpad-Button" onclick="adicionarCameraOrPost('Camera');fecharPopupNumpad()" id="opcaoCamera" value="Cam">Camera</button>
+              <button class="primary-numpad-Button" onclick="adicionarCameraOrPost('Post');fecharPopupNumpad()" id="opcaoPost" value="Post">Post</button>
+              <button class="primary-numpad-Button" onclick="adicionarCameraOrPost('Turn');fecharPopupNumpad()" id="opcaoTurn" value="Turn">Turn</button>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="3" style="text-align: center;">
+            <button id="button-minus1" onclick="adjustTime(-1)" style="margin: 0 5px; width: 100px; height: 100px; border-radius: 0; font-size: 16px;">-1 Lap</button>
+            <button id="button-minus2" onclick="adjustTime(-2)" style="margin: 0 5px; width: 100px; height: 100px; border-radius: 0; font-size: 16px;">-2 Laps</button>
+            <button onclick="fecharPopup(); adicionarLinha()" style="margin: 0 5px; width: 100px; height: 100px; border-radius: 0; font-size: 16px;"> Insert</button>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="3">
+            <input type="checkbox" id="videoCheck">Vídeo
+            <input type="checkbox" id="reportCheck">Report
+            <input type="checkbox" id="priorityCheck"> Priority
+          </td>
+        </tr>
+        <tr>
+          <td colspan="3">
+            <textarea id="obsInput" placeholder="obs"></textarea><br><br>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="3">
+            <select id="obsInputSelect" >
+              <option value="">Observations</option>
+            </select><br>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label for="curvaInput">Curva/Posto:</label>
+          </td>
+          <td>
+            <label for="horainput">Time:</label>
+          </td>
+          <td>
+            <label for="cameraNumber">Camera:</label>
+          </td>
+          <td>
+            <label for="inputCorrida">Race nº:</label>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <input type="text" id="curvaInput" placeholder="Curva/Posto" style="width: 100%; margin: 5px;">
+          </td>
+          <td>
+            <input type="text" id="horainput" value="" placeholder="hora" style="width: 100%; margin: 5px;">
+          </td>
+          <td>
+            <input type="text" id="cameraNumber" placeholder="Camera" style="width: 100%; margin: 5px;">
+          </td>
+          <td>
+            <input type="number" id="inputCorrida" placeholder="Numero Corrida" style="width: 100%; margin: 5px;">
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+<div id="popup2" class="popup">
+    <div id="popupEdit" class="popup-content">
+    <span class="close" onclick="fecharPopup2()">&times;</span>
+      <input type="text" id="curvaInput2" placeholder="Curva/Posto">&nbsp;<label>Turn/Post</label>
+      <input type="text" id="horainput2" value="" placeholder="hora">&nbsp;<label>Time</label><br>
+      <input type="text" id="cameraNumber2" placeholder="Camera">&nbsp;<label>Camera</label><br>
+      <input type="number" id="inputCorrida2" placeholder="Corrida">&nbsp;<label>Race nº</label><br>
+      <input type="checkbox" id="videoCheck2"> Vídeo<br>
+      <input type="checkbox" id="reportCheck2"> Report<br>
+      <input type="checkbox" id="nfacheck2"> N.F.A.<br>
+      <input type="checkbox" id="priorityCheck2"> Priority<br>
+      <textarea id="obsInput2" placeholder="obs"></textarea><br><br>
+      <select id="obsInputSelect2">
+        <option value="">Observations</option>
+      </select><br>
+      
+      <button onclick="fecharPopup2(); updateLinha()">Update</button>
+      <button onclick="fecharPopup2(); deleteLinha()">Delete</button>
+    </div>
 </div>
--->
+
+<div id="popupConfiguracoes" class="popup">
+  <div class="popup-content">
+    <table>
+      <tr>
+        <td colspan="2">
+          <span class="close" onclick="fecharPopupConfiguracoes()">&times;</span>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <button onclick="showWorkInProgress()">User List (WIP)</button>
+        </td>
+        <td>
+          <button onclick="abrirPopupAdicionaObservacoes()">Acrescentar Opções Obs</button>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <button onclick="inputRace()">Insert Race Name</button>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <button onclick="fecharPopupConfiguracoes()">Go Back</button>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<div id="popupAdicionaObservações" class="popup">
+  <div class="popup-content">
+  <span class="close" onclick="fecharPopupAdicionaObservacoes()">&times;</span><br>
+    <input type="text" id="newObs" placeholder="New Obs Option">
+    <button onclick="adicionarObsOptions();fecharPopupAdicionaObservacoes();">Add</button> 
+  </div>
+</div>
 
 <div id="popupFiltros" class="popup">
   <div class="popup-content">
@@ -128,7 +270,7 @@
           <p>Escolha o tipo de pesquisa:</p>
         </td>
         <td>
-          <span class="close" onclick="fecharPopupFiltros();resetCorridas()">&times;</span>
+          <span class="close" onclick="fecharPopupFiltros();resetCorridas();resetOpcaoCorrida()">&times;</span>
         </td>
       </tr>
       <tr>
@@ -146,101 +288,33 @@
         </td>
       </tr>
     </table>
-    <button onclick="fecharPopupFiltros();pesquisarCorrida();resetCorridas()">Confirmar</button>
+    <button onclick="fecharPopupFiltros();pesquisarCorrida();resetCorridas()">Confirm</button>
   </div>
 </div>
-
-<!-- PopUp para adicionar dados -->
-<div id="popup" class="popup" onload="limparLS()">
-  <div class="popup-content">
-    <span class="close" onclick="fecharPopup()">&times;</span>
-    <table id="popupNumpadTable">
-      <tr>
-        <td colspan="3" class="button-container">
-          <div>
-            <button class="primary-numpad-Button" onclick="adicionarCameraOrPost('Camera');fecharPopupNumpad()" id="opcaoCamera" value="Cam">Camera</button>
-            <button class="primary-numpad-Button" onclick="adicionarCameraOrPost('Post');fecharPopupNumpad()" id="opcaoPost" value="Post">Post</button>
-            <button class="primary-numpad-Button" onclick="adicionarCameraOrPost('Turn');fecharPopupNumpad()" id="opcaoTurn" value="Turn">Turn</button>
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <td colspan="3" style="text-align: center;">
-          <!--<button id="button-minus1" onclick="adjustTime(-1)" style="margin: 0 5px; width: 100px; height: 100px; border-radius: 0; font-size: 16px;">-1 Lap</button>-->
-          <!--<button id="button-minus2" onclick="adjustTime(-2)" style="margin: 0 5px; width: 100px; height: 100px; border-radius: 0; font-size: 16px;">-2 Laps</button>-->
-          <button onclick="fecharPopup(); adicionarLinha()" style="margin: 0 5px; width: 100px; height: 100px; border-radius: 0; font-size: 16px;"> Insert</button>
-        </td>
-      </tr>
-      <tr>
-        <td colspan="3">
-          <input type="checkbox" id="reportCheck">Report
-          <input type="checkbox" id="priorityCheck"> Priority
-        </td>
-      </tr>
-      <tr>
-        <td colspan="3">
-          <textarea id="obsInput" placeholder="obs"></textarea><br><br>
-        </td>
-      </tr>
-      <tr>
-        <td colspan="3">
-          <select id="obsInputSelect" >
-            <option value="">Observations</option>
-          </select><br>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <label for="curvaInput">Curva/Posto:</label>
-        </td>
-        <td>
-          <label for="horainput">Time:</label>
-        </td>
-        <td>
-          <label for="cameraNumber">Camera:</label>
-        </td>
-        <td>
-          <label for="inputCorrida">Race nº:</label>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <input type="text" id="curvaInput" placeholder="Curva/Posto" style="width: 100%; margin: 5px;">
-        </td>
-        <td>
-          <input type="text" id="horainput" value="" placeholder="hora" style="width: 100%; margin: 5px;">
-        </td>
-        <td>
-          <input type="text" id="cameraNumber" placeholder="Camera" style="width: 100%; margin: 5px;">
-        </td>
-        <td>
-          <input type="number" id="inputCorrida" placeholder="Numero Corrida" style="width: 100%; margin: 5px;">
-        </td>
-      </tr>
-    </table>
-  </div>
-</div>
-
-<!-- PopUp para editar dados-->
-<div id="popup2" class="popup">
-  <div class="popup-content" id="popupEdit" > <!-- Sem id="popupEdit" para o utilizador não mexer nas posições-->
-  <span class="close" onclick="fecharPopup2()">&times;</span>
-  <input type="text" id="curvaInput2" placeholder="Curva/Posto">&nbsp;<label>Turn/Post</label>
-  <input type="text" id="horainput2" value="" placeholder="hora">&nbsp;<label>Time</label><br>
-  <input type="text" id="cameraNumber2" placeholder="Camera">&nbsp;<label>Camera</label><br>
-  <input type="number" id="inputCorrida2" placeholder="Corrida">&nbsp;<label>Race nº</label><br>
-  <input type="checkbox" id="reportCheck2"> Report<br>
-  <input type="checkbox" id="nfacheck2"> N.F.A.<br>
-  <input type="checkbox" id="priorityCheck2"> Priority<br><br>
-      <select  id="obsInputSelect2">
-        <option value="">Observations</option>
-      </select><br>
-      <textarea id="obsInput2" placeholder="obs"></textarea><br>
-  <button onclick="fecharPopup2(); updateLinha()">Update</button>
-  <button onclick="fecharPopup2(); deleteLinha()">Delete</button>
-  </div>
-</div>
-
-               
-</div>
+                
 </body>
+<script>
+function disableButton(button) {
+  button.classList.add('pressed'); // Adiciona a classe para o efeito visual
+  button.disabled = true; // Desabilita o botão
+}
+
+document.getElementById('button-minus1').addEventListener('click', function() {
+  disableButton(this);
+  // Lógica adicional para -1 volta
+});
+
+document.getElementById('button-minus2').addEventListener('click', function() {
+  disableButton(this);
+  // Lógica adicional para -2 volta
+});
+
+document.querySelector('.table-container').addEventListener('scroll', function() {
+  const firstHighlight = document.querySelector('.highlight');
+  if (firstHighlight) {
+    const headerRow = document.querySelector('.header-row');
+    const rect = firstHighlight.getBoundingClientRect();
+    headerRow.style.setProperty('--scroll-position', `${rect.top}px`);
+  }
+});
+</script>

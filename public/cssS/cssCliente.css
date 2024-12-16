@@ -1606,3 +1606,7 @@ input[type="checkbox"]:checked::before {
     margin: 2px 1px; /* Manter margem reduzida entre as caixas de texto */
     display: inline-block; /* Permite que a caixa de texto ocupe a mesma linha que as legendas */
 }
+
+#raceStart, #raceRF, #raceSF {
+  display: none;
+}
