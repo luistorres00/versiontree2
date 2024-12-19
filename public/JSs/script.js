@@ -132,47 +132,74 @@ document.addEventListener("keydown", function (e) {
 });
 
 //
-document.addEventListener("keydown", function (e) { 
-  if ( 
-    popupAberto == false && 
-    popup2Aberto == false && 
-    popupNumpadAberto == false && 
-    popupNumpadPasswordAberto == false && 
-    popupRodaDentada == false && 
-    popupConfiguracoes == false && 
-    campoPesquisa == false 
-  ) { 
-    const corridaNumber = Number(localStorage.getItem("numCorridas")); 
-    const userType = localStorage.getItem("usertype"); 
-    let corrida; 
+document.addEventListener("keydown", function (e) {
+  if (
+    popupAberto == false &&
+    popup2Aberto == false &&
+    popupNumpadAberto == false &&
+    popupNumpadPasswordAberto == false &&
+    popupRodaDentada == false &&
+    popupConfiguracoes == false &&
+    campoPesquisa == false
+  ) {
+    let corrida = localStorage.getItem("numCorridas");
+    let redFlagCorrida = localStorage.getItem("redFlagCorrida"); // Recupera a corrida salva do Red Flag
 
-    if (corridaNumber != null || corridaNumber != "") { 
-      corrida = corridaNumber; 
-    } else { 
-      corrida = 1; 
-    } 
-    if (document.readyState == "complete" && userType != "user") { 
-      setTimeout(() => { 
-        if (e.key === "p" || e.key === "P") { 
-          // Incrementa o número da corrida para a próxima
-          corrida += 1; 
-          document.getElementById("curvaInput").value = "Start"; 
-          obterHoraAtual(); 
-          adicionarLinha(); 
-          // Atualiza o número da corrida no localStorage
-          localStorage.setItem("numCorridas", corrida); 
-        } else if (e.key === "r" || e.key === "R") { 
-          document.getElementById("curvaInput").value = "Red Flag"; 
-          obterHoraAtual(); 
-          adicionarLinha(); 
-        } else if (e.key === "s" || e.key === "S") { 
-          document.getElementById("curvaInput").value = "Slow Flag"; 
-          obterHoraAtual(); 
-          adicionarLinha(); 
+    // Garantir que 'corrida' seja um número válido
+    if (!corrida || isNaN(corrida)) {
+      corrida = 1; // Valor inicial se não existir
+    } else {
+      corrida = parseInt(corrida, 10);
+    }
+
+    if (document.readyState === "complete") {
+      setTimeout(() => { // Adiciona o atraso de 300ms
+        if (e.key === "p" || e.key === "P") {
+          // Se houver um Red Flag, usar a mesma corrida
+          if (redFlagCorrida) {
+            corrida = parseInt(redFlagCorrida, 10); // Reiniciar a corrida do Red Flag
+            localStorage.removeItem("redFlagCorrida"); // Limpa o Red Flag para novos starts
+          } else {
+            corrida += 1; // Caso contrário, incrementar normalmente
+          }
+
+          // Atualizar o inputCorrida
+          document.getElementById("inputCorrida").value = corrida;
+
+          // Atualizar as observações, evitando duplicação de "Race Nº"
+          let obsInput = document.getElementById("obsInput").value;
+          if (!obsInput.includes(`Race Nº:${corrida}`)) {
+            // document.getElementById("obsInput").value = `Race Nº:${corrida}`;
+          }
+
+          // Salvar no localStorage
+          localStorage.setItem("numCorridas", corrida);
+
+          // Adicionar nova linha
+          document.getElementById("curvaInput").value = "Start";
+          obterHoraAtual();
+          adicionarLinha();
+
+          console.log(`Corrida reiniciada ou nova: ${corrida}`); // Log para depuração
         } 
-      }, 300); 
-    } 
-  } 
+        else if (e.key === "r" || e.key === "R") {
+          // Quando ocorre um Red Flag, salva o número da corrida atual
+          localStorage.setItem("redFlagCorrida", corrida);
+
+          document.getElementById("curvaInput").value = "Red Flag";
+          obterHoraAtual();
+          adicionarLinha();
+
+          console.log(`Red Flag na corrida: ${corrida}`); // Log para depuração
+        } 
+        else if (e.key === "s" || e.key === "S") {
+          document.getElementById("curvaInput").value = "Slow Flag";
+          obterHoraAtual();
+          adicionarLinha();
+        }
+      }, 300); // Atraso de 300ms
+    }
+  }
 });
 
 //
@@ -2295,46 +2322,65 @@ function adjustTime(minutes) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-  const buttonMinus1Lap = document.getElementById("buttonMinus1Lap"); // ID do botão -1 Lap
-  const buttonMinus2Laps = document.getElementById("buttonMinus2Laps"); // ID do botão -2 Laps
+  // Referência aos botões
+  const buttonMinus1Lap = document.getElementById("button-minus1"); // Botão -1 Lap
+  const buttonMinus2Laps = document.getElementById("button-minus2"); // Botão -2 Laps
+  const obsInput = document.getElementById("obsInput"); // Campo de observações
 
+  // Verificar se o campo obsInput existe
+  if (!obsInput) {
+    console.error("O campo com o ID 'obsInput' não foi encontrado.");
+    return; // Impede que o código continue se o campo não for encontrado
+  }
+
+  // Evento para o botão -1 Lap
   buttonMinus1Lap.addEventListener("click", function () {
-    console.log("Botão -1 Lap clicado"); // Log para verificar se o botão foi clicado
-    const obsInput = document.getElementById("obsinput");
-    if (obsInput) {
-      obsInput.value += " -1 Lap"; // Atualiza o campo de observações
-    }
+    console.log("Botão -1 Lap clicado"); // Log para depuração
+    //if (obsInput) {
+      // Verifica se "-1 Lap" já está no campo de observações
+      //if (!obsInput.value.includes("-1 Lap")) {
+        //obsInput.value += " -1 Lap"; // Adiciona o texto ao campo se não existir
+        //console.log("-1 Lap adicionado ao campo obsInput");
+      //} else {
+        //console.log("-1 Lap já existe no campo obsInput");
+     // }
+    //}
   });
 
+  // Evento para o botão -2 Laps
   buttonMinus2Laps.addEventListener("click", function () {
-    console.log("Botão -2 Laps clicado"); // Log para verificar se o botão foi clicado
-    const obsInput = document.getElementById("obsinput");
-    if (obsInput) {
-      obsInput.value += " -2 Laps"; // Atualiza o campo de observações
-    }
-  });
+    console.log("Botão -2 Laps clicado"); // Log para depuração
+   // if (obsInput) {
+      // Verifica se "-2 Laps" já está no campo de observações
+    //  if (!obsInput.value.includes("-2 Laps")) {
+      //  obsInput.value += " -2 Laps"; // Adiciona o texto ao campo se não existir
+       // console.log("-2 Laps adicionado ao campo obsInput");
+      //} else {
+       // console.log("-2 Laps já existe no campo obsInput");
+     // }
+  //  }
+  //});
 });
 
-document.addEventListener("DOMContentLoaded", function () {
-  const buttonMinus1Lap = document.getElementById("buttonMinus1Lap");
-  const buttonMinus2Laps = document.getElementById("buttonMinus2Laps");
+// Função para resetar a corrida
+function resetCorrida() {
+  // Resetando o número da corrida no localStorage
+  localStorage.setItem("numCorridas", 1);
 
-  buttonMinus1Lap.addEventListener("click", function () {
-    const obsInput = document.getElementById("obsinput");
-    if (obsInput) {
-      obsInput.value += " -1 Lap";
-    } else {
-      console.error("Textarea com ID 'obsinput' não encontrada.");
-    }
-  });
+  // Atualizando o campo de input com o número da corrida 1
+  document.getElementById("inputCorrida").value = 1;
 
-  buttonMinus2Laps.addEventListener("click", function () {
-    const obsInput = document.getElementById("obsinput");
-    if (obsInput) {
-      obsInput.value += " -2 Laps";
-    } else {
-      console.error("Textarea com ID 'obsinput' não encontrada.");
-    }
+  // (Opcional) Resetar o campo de observações
+  document.getElementById("obsInput").value = "";
+
+  console.log("Corrida foi resetada para 1!");
+}
+
+// Certifique-se de que o código JavaScript seja executado quando o DOM estiver pronto
+document.addEventListener("DOMContentLoaded", function() {
+  // Adicionando o listener para o botão "Clear Data"
+  document.getElementById("botaoLimparTabela").addEventListener("click", function() {
+    resetCorrida();  // Chama a função de reset
   });
 });
-
+})

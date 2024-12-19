@@ -70,12 +70,12 @@
       </tbody>
   </table>
 </div>
-<!---
-<div id="extraButtons">
+
+<div id="extraButtons" hidden>
   <button class="numpad-Button" onclick="abrirPopup(); obterHoraAtual();obterStartOrRF('RF')" id="raceRF" value="Red Flag">Red Flag (R)</button></br>
   <button class="numpad-Button" onclick="abrirPopup(); obterHoraAtual();obterStartOrRF('SF')" id="raceSF" value="Slow Flag">Slow (S)</button></br>
   <button class="numpad-Button" onclick="abrirPopup(); obterHoraAtual(); obterStartOrRF('Start')" id="raceStart" value="Start">Start (P)</button></br>  
-</div>-->
+</div>
 
 <!--Protótipo numpad em comentário (Com pop up)-->
 <div id ="numpad">
@@ -84,18 +84,44 @@
 
 <div id="popupRodadentada" class="popup">
   <div class="popup-content">
-    <span class="close" onclick="fecharPopupRodaDentada()">&times;</span>
     <table id="tableRodaDentada">
       <tr>
         <td colspan="2">
-          <button id="logoutButton">Logout</button>
+          <span class="close" onclick="fecharPopupRodaDentada()">&times;</span>
         </td>
       </tr>
       <tr>
-        <td colspan="2">
-          <input type="number" id="numberCurvas" placeholder="Camera number" value="" style="text-align: center;font-size: 20px;width: 155px;">&nbsp;<label>Numpad nº</label>
-          <input type="number" id="numberCorrida" placeholder="Lap number" value="">&nbsp;<label>Race nº</label>
+        <td id="labelConfig">
+          Numero de Botões:
         </td>
+      </tr>
+      <tr>
+        <td hidden>
+          <input type="number" id="numberCurvas" placeholder="Camera number" value="" style="text-align: center;font-size: 20px;width: 155px;">&nbsp;<label>Numpad nº</label>
+          <input type="number" id="numberCorrida"placeholder="Lap number" value="">&nbsp;<label>Race</label>
+        </td>
+      </tr>
+      <tr>
+        <td id="butaoGerarNumpad">
+          <button onclick="abrirPopupNumpadPassword()">Generate Numpad</button>
+        </td>
+        <td id="butaoSettings">
+          <button  onclick="abrirPopupConfiguracoes()">Settings</button>
+        </td>
+      </tr>
+      <tr>
+        <td id="botaoLimparTabela">
+          <button  onclick="limparTabela()">Clear Data</button>
+        </td>
+        <td id="botaoExportar">
+          <button  onclick="exportarTabela()">Save Current Data</button>
+        </td>
+        <tr>
+          <td colspan="2">
+            <button id="logoutButton">Logout</button>
+          </td>
+        </tr>
+        
       </tr>
     </table>
   </div>
@@ -139,24 +165,15 @@
         <tr>
           <td colspan="3" class="button-container">
             <div>
-              <button class="primary-numpad-Button" onclick="adicionarCameraOrPost('Camera');fecharPopupNumpad()" id="opcaoCamera" value="Cam">Camera</button>
-              <button class="primary-numpad-Button" onclick="adicionarCameraOrPost('Post');fecharPopupNumpad()" id="opcaoPost" value="Post">Post</button>
+              <button class="primary-numpad-Button" onclick="adicionarCameraOrPost('Camera');fecharPopupNumpad()" id="opcaoCamera" value="Cam" hidden>Camera</button>
+              <button class="primary-numpad-Button" onclick="adicionarCameraOrPost('Post');fecharPopupNumpad()" id="opcaoPost" value="Post" hidden>Post</button>
               <button class="primary-numpad-Button" onclick="adicionarCameraOrPost('Turn');fecharPopupNumpad()" id="opcaoTurn" value="Turn">Turn</button>
             </div>
           </td>
         </tr>
         <tr>
           <td colspan="3" style="text-align: center;">
-            <button id="button-minus1" onclick="adjustTime(-1)" style="margin: 0 5px; width: 100px; height: 100px; border-radius: 0; font-size: 16px;">-1 Lap</button>
-            <button id="button-minus2" onclick="adjustTime(-2)" style="margin: 0 5px; width: 100px; height: 100px; border-radius: 0; font-size: 16px;">-2 Laps</button>
             <button onclick="fecharPopup(); adicionarLinha()" style="margin: 0 5px; width: 100px; height: 100px; border-radius: 0; font-size: 16px;"> Insert</button>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="3">
-            <input type="checkbox" id="videoCheck">Vídeo
-            <input type="checkbox" id="reportCheck">Report
-            <input type="checkbox" id="priorityCheck"> Priority
           </td>
         </tr>
         <tr>
@@ -172,31 +189,47 @@
           </td>
         </tr>
         <tr>
-          <td>
-            <label for="curvaInput">Curva/Posto:</label>
-          </td>
-          <td>
-            <label for="horainput">Time:</label>
-          </td>
-          <td>
-            <label for="cameraNumber">Camera:</label>
-          </td>
-          <td>
-            <label for="inputCorrida">Race nº:</label>
+          <td colspan="3">
+            <div class="checkbox-group" style="display: flex; flex-direction: row;">
+              <div class="checkbox-item">
+                <label for="videoCheck">Vídeo</label>
+                <input type="checkbox" id="videoCheck">
+              </div>
+              <div class="checkbox-item">
+                <label for="reportCheck">Report</label>
+                <input type="checkbox" id="reportCheck">
+              </div>
+              <div class="checkbox-item">
+                <label for="priorityCheck"> Priority</label>
+                <input type="checkbox" id="priorityCheck">
+              </div>
+            </div>
           </td>
         </tr>
         <tr>
           <td>
-            <input type="text" id="curvaInput" placeholder="Curva/Posto" style="width: 100%; margin: 5px;">
+            <div class="input-group">
+              <label for="curvaInput">Turn/Post</label>
+              <input type="text" id="curvaInput" placeholder="Curva/Posto">
+            </div>
           </td>
           <td>
-            <input type="text" id="horainput" value="" placeholder="hora" style="width: 100%; margin: 5px;">
+            <div class="input-group">
+              <label for="horainput">Time</label>
+              <input type="text" id="horainput" value="" placeholder="hora">
+            </div>
           </td>
           <td>
-            <input type="text" id="cameraNumber" placeholder="Camera" style="width: 100%; margin: 5px;">
+            <div class="input-group">
+              <label for="cameraNumber">Camera</label>
+              <input type="text" id="cameraNumber" placeholder="Camera">
+            </div>
           </td>
           <td>
-            <input type="number" id="inputCorrida" placeholder="Numero Corrida" style="width: 100%; margin: 5px;">
+            <div class="input-group">
+              <label for="inputCorrida">Race </label>
+              <input type="number" id="inputCorrida" placeholder="Numero Corrida">
+            </div>
           </td>
         </tr>
       </table>
@@ -205,22 +238,49 @@
 
 <div id="popup2" class="popup">
     <div id="popupEdit" class="popup-content">
-    <span class="close" onclick="fecharPopup2()">&times;</span>
-      <input type="text" id="curvaInput2" placeholder="Curva/Posto">&nbsp;<label>Turn/Post</label>
-      <input type="text" id="horainput2" value="" placeholder="hora">&nbsp;<label>Time</label><br>
-      <input type="text" id="cameraNumber2" placeholder="Camera">&nbsp;<label>Camera</label><br>
-      <input type="number" id="inputCorrida2" placeholder="Corrida">&nbsp;<label>Race nº</label><br>
-      <input type="checkbox" id="videoCheck2"> Vídeo<br>
-      <input type="checkbox" id="reportCheck2"> Report<br>
-      <input type="checkbox" id="nfacheck2"> N.F.A.<br>
-      <input type="checkbox" id="priorityCheck2"> Priority<br>
-      <textarea id="obsInput2" placeholder="obs"></textarea><br><br>
-      <select id="obsInputSelect2">
-        <option value="">Observations</option>
-      </select><br>
-      
-      <button onclick="fecharPopup2(); updateLinha()">Update</button>
-      <button onclick="fecharPopup2(); deleteLinha()">Delete</button>
+        <span class="close" onclick="fecharPopup2()">&times;</span>
+        <div class="input-group-container">
+            <div class="input-group">
+                <label for="curvaInput2">Turn/Post</label>
+                <input type="text" id="curvaInput2" placeholder="Curva/Posto">
+            </div>
+            <div class="input-group">
+                <label for="horainput2">Time</label>
+                <input type="text" id="horainput2" value="" placeholder="hora">
+            </div>
+            <div class="input-group">
+                <label for="cameraNumber2">Camera</label>
+                <input type="text" id="cameraNumber2" placeholder="Camera">
+            </div>
+            <div class="input-group">
+                <label for="inputCorrida2">Race</label>
+                <input type="number" id="inputCorrida2" placeholder="Corrida">
+            </div>
+        </div>
+        <div class="checkbox-group" style="display: flex; flex-direction: row;">
+            <div class="checkbox-item">
+                <label for="videoCheck2">Vídeo</label>
+                <input type="checkbox" id="videoCheck2">
+            </div>
+            <div class="checkbox-item">
+                <label for="reportCheck2">Report</label>
+                <input type="checkbox" id="reportCheck2">
+            </div>
+            <div class="checkbox-item">
+                <label for="nfacheck2">N.F.A.</label>
+                <input type="checkbox" id="nfacheck2">
+            </div>
+            <div class="checkbox-item">
+                <label for="priorityCheck2">Priority</label>
+                <input type="checkbox" id="priorityCheck2">
+            </div>
+        </div>
+        <textarea id="obsInput2" placeholder="Observações..."></textarea><br><br>
+        <select id="obsInputSelect2">
+          <option value="">Observations</option>
+        </select><br>
+        <button onclick="fecharPopup2(); updateLinha()">Update</button>
+        <button onclick="fecharPopup2(); deleteLinha()">Delete</button>
     </div>
 </div>
 

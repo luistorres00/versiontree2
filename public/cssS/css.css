@@ -389,17 +389,23 @@ td[data-report="true"] {
 @media screen and (max-width: 1024px) {
   .table-container { width: 60%; }
   #logo { width: 180px; }
+  #logo{
+    width: 20%;
+  }
   #content-top { 
     height: 90px;
     padding: 12px;
   }
+  #header{
+    font-size: 20px;
+  }
   .table-container { top: 128px; }
   #numpad {
-    width: 15%;
+    width: 20%;
     top: 56vh;
   }
   #numpad-table {
-    width: 14vw;
+    width: 20vw;
   }
   .numpad-Button {
     width: 5vw;
@@ -422,7 +428,20 @@ td[data-report="true"] {
     height: 80px;
     padding: 10px;
   }
+  #header {
+    font-size: 21px; /* Reduzir o tamanho da fonte do header */
   .table-container { top: 118px; }
+  }
+  #logo {
+    width: 20%; /* Reduzir ainda mais a largura do logo */
+    height: auto;
+}
+  #date{
+    display: none;
+  }
+  #clock{
+    display: none;
+  }
   #numpad {
     width: 20%;
     top: 54vh;
@@ -507,6 +526,43 @@ td[data-report="true"] {
   }
 }
 
+@media screen and (max-width: 600px) {
+  #logo {
+    width: 25%; /* Reduzir ainda mais a largura do logo */
+    height: auto;
+}
+  #header {
+    font-size: 11px; /* Reduzir o tamanho da fonte do header */
+}
+  #clock-date-container {
+    font-size: 9px; /* Reduzir o tamanho da fonte do clock-date */
+}
+  #pesquisa{
+  width: 25%;
+  display: none;
+}
+  #searchCorrida{
+    display: none;
+  }
+  #filtroImg {
+  display: none;
+}
+  #numpad {
+    display: none;
+  }
+  #clock-date-container {
+    display: none;
+  }
+  #date{
+    display: none;
+  }
+  #extraButtons{
+    display: none;
+  }
+
+}
+
+
 /* Cores das linhas */
 #tabela tbody tr:nth-child(even) {
   background-color: #f9f9f9;
@@ -518,10 +574,12 @@ td[data-report="true"] {
 
 /* Allow table cells to expand vertically based on content */
 #tabela td {
+  padding: 10px; /* Aumentando o padding para garantir espaço */
+  vertical-align: center; /* Garante que o conteúdo fique centralizado verticalmente */
+  text-align: justify; /* Centraliza o conteúdo horizontalmente, se necessário */
   height: auto;
   white-space: normal;
-  vertical-align: middle;
-  line-height: 1.4;
+  line-height: 1.3;
 }
 
 /* Specific for observation column to handle wrapping */
@@ -541,7 +599,7 @@ td[data-report="true"] {
 }
 
 tr.selected {
-  background-color: #ffeb3b !important;
+  background-color: #d6ff07 !important;
   position: sticky;
   top: 120px;
   z-index: 998;
@@ -983,7 +1041,7 @@ tr.highlight {
 }
 
 .status-slow {
-    background-color: #FFD700 !important; /* Yellow */
+    background-color: #d6ff07 !important; /* Yellow */
     color: black !important;
 }
 
@@ -1030,7 +1088,7 @@ input[type="checkbox"] {
   /* Definindo um cursor personalizado */
   cursor: pointer;
   /* Posicionando o texto ao lado da checkbox */
-  vertical-align: middle;
+  vertical-align: center;
   margin-right: 5px; /* Espaço entre a checkbox e o texto */
   }
   
@@ -1043,13 +1101,25 @@ input[type="checkbox"] {
   line-height: 20px;
   }
 
-/* Estilo para o texto All Races */
-#pesquisaCorrida option {
-  color: black;
+  /*chebox popup de edição*/
+.checkbox-group {
+  display: flex; /* Alinha todos os checkboxes horizontalmente */
+  justify-content: center; /* Centraliza os checkboxes no contêiner */
+  margin-bottom: 15px; /* Espaçamento entre linhas de checkbox */
 }
 
-#searchCorrida {
-  color: white !important;
+.checkbox-item {
+  display: flex; /* Permite que o checkbox e o label sejam tratados como uma unidade */
+  flex-direction: column; /* Coloca o label em cima do checkbox */
+  align-items: center; /* Centraliza o checkbox e o label verticalmente */
+  margin-right: 20px; /* Espaçamento entre os checkboxes à direita */
+  margin-left: 10px; /* Espaçamento entre os checkboxes à esquerda*/
+}
+
+.checkbox-item label {
+  margin-bottom: 2px; /* Espaçamento entre o label e o checkbox */
+  text-align: center; /* Centraliza o texto do label */
+  width: 100%; /* Faz o label ocupar toda a largura do contêiner */
 }
 
 /* Numpad styles */
@@ -1124,7 +1194,6 @@ input[type="checkbox"] {
 .primary-numpad-Button{
   width: 5vw;
   height: 5vh;
-  vertical-align: middle;
 }
 
 #numpad-password{
@@ -1164,7 +1233,7 @@ input[type="checkbox"] {
   width: 250px;
   height: 60px;
   vertical-align: middle;
-  background-color: #ffcc00;
+  background-color: #d6ff07;
   color: black;
   border: none;
   padding: 10px;
@@ -1419,7 +1488,7 @@ input[type="checkbox"] {
     top: 50vh;
   }
   #numpad-table {
-    width: 14vw;
+    display: none;
   }
   .numpad-Button {
     width: 6vw;
@@ -1451,6 +1520,7 @@ input[type="checkbox"] {
 #tabela th, #tabela td {
   border: 1px solid #ddd;
   text-align: center; /* Centraliza texto e ícones */
+  padding-top: 15px;
 }
 
 #tabela td.obs {
@@ -1459,39 +1529,40 @@ input[type="checkbox"] {
 
 #obsInputSelect, #obsInputSelect2 {
   display: block; /* Garante que a dropdown ocupe toda a largura */
-  margin-top: 10px; /* Espaçamento acima da dropdown */
+  margin-top: -20px; /* Espaçamento acima da dropdown */
   position: relative; /* Para garantir que a posição seja relativa ao contêiner */
   z-index: 1000; /* Garante que a dropdown apareça acima de outros elementos */
 }
 
-/* Aumentar a largura do popup de adicionar dados em 40% em todas as escalas de tela, mantendo o popup de pesquisa no tamanho normal. */
-@media screen and (min-width: 1367px) {
-  #popupAdicionaDados {
-    width: 58.8%;
-  }
+/*checkbox popup de edição*/
+/* Ajustando o CSS para alinhar os campos de entrada e rótulos horizontalmente usando Flexbox */
+.input-group-container {
+    display: flex; /* Alinha todos os grupos de input horizontalmente */
+    justify-content: space-between; /* Espaçamento igual entre os grupos */
+    margin-bottom: 20px; /* Espaçamento entre linhas de input */
 }
 
-@media screen and (max-width: 1366px) {
-  #popupAdicionaDados {
-    width: 49%;
-  }
+.input-group {
+    display: flex;
+    flex-direction: column; /* Rótulo em cima do input */
+    align-items: center; /* Centraliza o conteúdo do input */
+    flex: 1; /* Permite que todos os inputs ocupem espaço igual */
+    margin: 0 5px; /* Espaçamento lateral entre os grupos */
 }
 
-@media screen and (max-width: 1024px) {
-  #popupAdicionaDados {
-    width: 56%;
-  }
+.input-group input {
+    padding: 8px; /* Aumentando o padding interno */
+    width: 100%; /* Ajustando a largura para ocupar todo o espaço disponível */
+    box-sizing: border-box; /* Inclui padding e border no cálculo da largura */
 }
 
-@media screen and (max-width: 800px) {
-  #popupAdicionaDados {
-    width: 70%;
-  }
+.checkbox-group {
+  margin-bottom: 15px; /* Aumentando o espaçamento entre os checkboxes */
 }
 
 .popup button, .popup input, .popup select, .popup textarea {
-  font-size: 16px; /* Aumentar o tamanho da fonte para todos os itens do popup */
-  padding: 12px; /* Aumentar o padding para botões, inputs, selects e textarea */
+  font-size: 16px; /* Ajustar o tamanho da fonte para todos os itens do popup */
+  padding: 12px; /* Ajustar o padding para botões, inputs, selects e textarea */
   text-align: center;
 }
 
@@ -1532,7 +1603,6 @@ input[type="checkbox"]:checked::before {
   position: absolute;
   inset: 0; /* Centraliza o conteúdo */
 }
-
 
 #opcaoCamera, #opcaoPost, #opcaoTurn {
   width: 100px; /* Largura fixa para os botões */
@@ -1605,4 +1675,24 @@ input[type="checkbox"]:checked::before {
     width: 60%; /* Alinhar a largura da caixa de texto de observações com as outras caixas de texto */
     margin: 2px 1px; /* Manter margem reduzida entre as caixas de texto */
     display: inline-block; /* Permite que a caixa de texto ocupe a mesma linha que as legendas */
+}
+
+#obsInput2 {
+    width: 80%; /* Ajuste a largura conforme necessário */
+    height: 150px; /* Ajuste a altura conforme necessário */
+    margin: 10px auto; /* Centraliza a textarea e adiciona margem em cima e embaixo */
+    display: block; /* Garante que a textarea seja um bloco */
+}
+
+#obsInput2 {
+    width: 80%; /* Ajuste a largura conforme necessário */
+    height: 150px; /* Ajuste a altura conforme necessário */
+    margin: 10px auto; /* Centraliza a textarea e adiciona margem em cima e embaixo */
+    display: block; /* Garante que a textarea seja um bloco */
+}
+#searchCorrida {
+  color: white;
+}
+#searchCorrida {
+  color: white;
 }
