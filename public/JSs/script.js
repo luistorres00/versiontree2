@@ -152,37 +152,78 @@ document.addEventListener("keydown", function (e) {
       corrida = parseInt(corrida, 10);
     }
 
+    // 🔍 Buscar a última corrida real na tabela antes de incrementar
+    let tabela = document.getElementById("tabela");
+    let ultimaCorridaNaTabela = 1; // Se não houver dados, começa da 1
+
+    if (tabela && tabela.rows.length > 1) {
+      for (let i = tabela.rows.length - 1; i > 0; i--) {
+        let corridaNaLinha = tabela.rows[i].cells[10]?.textContent.trim(); // Coluna da corrida
+        if (corridaNaLinha && !isNaN(corridaNaLinha)) {
+          ultimaCorridaNaTabela = parseInt(corridaNaLinha, 10);
+          break; // Achou a última corrida válida
+        }
+      }
+    }
+
     if (document.readyState === "complete") {
-      setTimeout(() => { // Adiciona o atraso de 300ms
+      setTimeout(() => {
         if (e.key === "p" || e.key === "P") {
-          // Se houver um Red Flag, usar a mesma corrida
+          let curvaInputValue = "Start"; // Valor padrão para coluna Curva
+
+          // 🔄 Atualizar corrida atual com base na tabela
+          corrida = ultimaCorridaNaTabela;
+
           if (redFlagCorrida) {
-            corrida = parseInt(redFlagCorrida, 10); // Reiniciar a corrida do Red Flag
-            localStorage.removeItem("redFlagCorrida"); // Limpa o Red Flag para novos starts
+            // Se existe Red Flag, perguntar se é nova corrida ou restart
+            let isNewRace = confirm("Red Flag Detected! New race or Restart?\nOK for new race, Cancel for restart.");
+
+            if (!isNewRace) {
+              // Reiniciar a corrida do Red Flag
+              corrida = parseInt(redFlagCorrida, 10);
+              localStorage.removeItem("redFlagCorrida"); // Limpar o Red Flag
+              curvaInputValue = "R-Start"; // Indicar reinício na coluna Curva
+
+              // Atualizar o obsInput com "Race Nº:X"
+              let obsElement = document.getElementById("obsInput");
+              if (obsElement) {
+                obsElement.value = `Race Nº:${corrida}`;
+                console.log(`obsInput atualizado para: Race Nº:${corrida}`);
+              } else {
+                console.error("Elemento obsInput não encontrado no DOM.");
+              }
+            } else {
+              // Incrementar para nova corrida
+              corrida += 1;
+            }
           } else {
-            corrida += 1; // Caso contrário, incrementar normalmente
+            // Se não há Red Flag, incrementa baseado na última corrida real na tabela
+            corrida += 1;
           }
 
           // Atualizar o inputCorrida
           document.getElementById("inputCorrida").value = corrida;
 
-          // Atualizar as observações, evitando duplicação de "Race Nº"
-          let obsInput = document.getElementById("obsInput").value;
-          if (!obsInput.includes(`Race Nº:${corrida}`)) {
-            // document.getElementById("obsInput").value = `Race Nº:${corrida}`;
+          let obsElement = document.getElementById("obsInput");
+          if (obsElement) {
+            let obsInput = obsElement.value;
+            if (!obsInput.includes(`Race Nº:${corrida}`)) {
+              //obsElement.value = `Race Nº:${corrida}`;
+            }
+          } else {
+            console.error("Elemento obsInput não encontrado no DOM.");
           }
 
           // Salvar no localStorage
           localStorage.setItem("numCorridas", corrida);
 
           // Adicionar nova linha
-          document.getElementById("curvaInput").value = "Start";
+          document.getElementById("curvaInput").value = curvaInputValue;
           obterHoraAtual();
           adicionarLinha();
 
-          console.log(`Corrida reiniciada ou nova: ${corrida}`); // Log para depuração
-        } 
-        else if (e.key === "r" || e.key === "R") {
+          console.log(`Corrida: ${corrida}, Curva: ${curvaInputValue}, Red Flag antes do Start: ${!!redFlagCorrida}`);
+        } else if (e.key === "r" || e.key === "R") {
           // Quando ocorre um Red Flag, salva o número da corrida atual
           localStorage.setItem("redFlagCorrida", corrida);
 
@@ -190,14 +231,30 @@ document.addEventListener("keydown", function (e) {
           obterHoraAtual();
           adicionarLinha();
 
-          console.log(`Red Flag na corrida: ${corrida}`); // Log para depuração
-        } 
-        else if (e.key === "s" || e.key === "S") {
+          console.log(`Red Flag na corrida: ${corrida}`);
+        } else if (e.key === "s" || e.key === "S") {
           document.getElementById("curvaInput").value = "Slow Flag";
           obterHoraAtual();
           adicionarLinha();
         }
-      }, 300); // Atraso de 300ms
+        document.addEventListener("keydown", function (e) {
+          if (popupNumpadAberto == true) { // 🔥 Agora funciona com o popup aberto!
+            if (e.key === "c" || e.key === "C") {
+              let numpadInput = document.getElementById("numpadInput"); // 🔹 Onde o número é inserido no popup
+              let cameraInput = document.getElementById("cameraNumber"); // 🔹 Campo onde queremos armazenar
+        
+              if (numpadInput && cameraInput && numpadInput.value.trim() !== "") {
+                cameraInput.value = numpadInput.value; // 🔥 Move o valor do popup para Camera
+                numpadInput.value = ""; // 🔥 Limpa o campo do popup
+        
+                console.log(`Número ${cameraInput.value} definido como Câmera.`);
+              } else {
+                console.warn("Campo 'numpadInput' está vazio ou não encontrado.");
+              }
+            }
+          }
+        });
+      }, 300);
     }
   }
 });
@@ -223,6 +280,8 @@ document.addEventListener("DOMContentLoaded", function () {
 document.addEventListener("DOMContentLoaded", function () {
   const reportCheckbox = document.getElementById("reportCheck2");
   const nfaCheckbox = document.getElementById("nfacheck2");
+  
+
 
   reportCheckbox.addEventListener("click", function () {
     if (this.checked && nfaCheckbox.checked) {
@@ -242,7 +301,30 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 });
+document.addEventListener("DOMContentLoaded", function () {
+  const reportCheckbox = document.getElementById("reportCheck");
+  const nfaCheckbox = document.getElementById("nfacheck");
+  
 
+
+  reportCheckbox.addEventListener("click", function () {
+    if (this.checked && nfaCheckbox.checked) {
+      /*alert(
+        "Erro: Não é possível selecionar 'Report' e 'NFA' simultaneamente."
+      );*/
+      nfaCheckbox.checked = false; // Desmarca o checkbox "NFA"
+    }
+  });
+
+  nfaCheckbox.addEventListener("click", function () {
+    if (this.checked && reportCheckbox.checked) {
+      /*alert(
+        "Erro: Não é possível selecionar 'NFA' e 'Report' simultaneamente."
+      );*/
+      reportCheckbox.checked = false; // Desmarca o checkbox "Report"
+    }
+  });
+}); 
 //
 document.addEventListener("DOMContentLoaded", function () {
   const horaInput = document.getElementById("horainput2");
@@ -760,21 +842,21 @@ function showInstallPrompt() {
 
 // Adicionadar função para adicionar nova linha à tabela
 function adicionarLinha() {
-  const registos = JSON.parse(localStorage.getItem("dadosTabela"));
-  const arrayCorridas = JSON.parse(localStorage.getItem("opcoesCorridas"));
-  const arrayRFlag = JSON.parse(localStorage.getItem("dadosTabela"));
-  const numpadDBData = JSON.parse(localStorage.getItem("numpadData"));
-  let corrida = document.getElementById("inputCorrida").value;
+  const registos = JSON.parse(localStorage.getItem("dadosTabela")) || [];
+  const arrayCorridas = JSON.parse(localStorage.getItem("opcoesCorridas")) || [];
+  const arrayRFlag = JSON.parse(localStorage.getItem("dadosTabela")) || [];
+  const numpadDBData = JSON.parse(localStorage.getItem("numpadData")) || [];
+  let corrida = document.getElementById("inputCorrida")?.value || 0;
   const userType = localStorage.getItem("usertype");
-  // Ir buscar o numero da corrida
-  if (userType == "user") {
-    if (corrida == null || corrida == "") {
+
+  if (userType === "user") {
+    if (!corrida) {
       numpadDBData.forEach((item) => {
         corrida = item.numberCorrida;
       });
     }
   } else {
-    if (corrida == null || corrida == "") {
+    if (!corrida) {
       numpadDBData.forEach((item) => {
         corrida = item.numberCorrida;
       });
@@ -789,63 +871,62 @@ function adicionarLinha() {
   if (corrida <= 0) {
     corrida = 1;
   }
+
   const tabela = document.querySelector("tbody");
   const novaLinha = document.createElement("tr");
 
-  // Capturar os valores dos campos do pop-up
-  const camera = document.getElementById("cameraNumber").value;
-  let curva = document.getElementById("curvaInput").value;
-  const hora = document.getElementById("horainput").value;
-  const video = document.getElementById("videoCheck").checked;
-  const report = document.getElementById("reportCheck").checked;
-  const priority = document.getElementById("priorityCheck").checked;
-  let obs = document.getElementById("obsInput").value;
-  let obsDropDown = document.getElementById("obsInputSelect").value;
+  const camera = document.getElementById("cameraNumber")?.value || "";
+  const curvaInput = document.getElementById("curvaInput");
+  let curva = curvaInput ? curvaInput.value : "";
+  const hora = document.getElementById("horainput")?.value || "";
+  const video = document.getElementById("videoCheck")?.checked || false;
+  const nfa = document.getElementById("nfaCheck")?.checked || false;
+  const report = document.getElementById("reportCheck")?.checked || false;
+  const priority = document.getElementById("priorityCheck")?.checked || false;
+  const obsInput = document.getElementById("obsInput");
+  let obs = obsInput ? obsInput.value : "";
+  const obsDropDown = document.getElementById("obsInputSelect")?.value || "";
 
-  if (obs != "" && obsDropDown != "") {
+  if (obs !== "" && obsDropDown !== "") {
     obs = obs + " - " + obsDropDown;
-  } else if (obs == "" && obsDropDown != "") {
+  } else if (obs === "" && obsDropDown !== "") {
     obs = obsDropDown;
   }
+   
 
-  // Adicionar a corrida ás obs se for start
-  if (curva == "Start" && obs.includes("Race nº:") == false) {
+
+
+
+
+  
+  // Adicionar a corrida às observações se for Start
+  if (curva === "Start" && !obs.includes("Race nº:")) {
     obs =
       `Race Nº:${corrida}\n` +
-      document.getElementById("obsInput").value +
-      document.getElementById("obsInputSelect2").value;
+      (obsInput?.value || "") +
+      (document.getElementById("obsInputSelect2")?.value || "");
   }
 
-  // Se report for 0, definir nfa como 1
-  let nfa = false;
-  if (!report) {
-    nfa = null;
-  }
-
-  // Confirmar se a corrida já foi iniciada ou se está a ser iniciada em duplicado
-
-  if (arrayRFlag && arrayRFlag.length > 0) {
-    // Obter o último objeto do array (última linha de dados)
+  // Lógica para Restart Race
+  if (arrayRFlag.length > 0) {
     const ultimaLinha = arrayRFlag[arrayRFlag.length - 1];
-    console.log(ultimaLinha);
-
-    // Verificar se a última linha está marcada como "Red Flag" e se a corrida está na lista de corridas
     if (
       ultimaLinha.curva === "Red Flag" &&
       arrayCorridas.includes(Number(corrida))
     ) {
       window.alert("Race Restarted");
-      console.log("DD");
-    } //else {
-      // Se a última linha não estiver marcada como "Red Flag", aplicar a condição
-      //if (curva === "Start" && arrayCorridas.includes(Number(corrida))) {
-       // window.alert("You can't start a race twice!");
-        //return;
-      //}
-    //}
-  }
+      console.log("Race Restart Detected");
 
-  // Armazenar os dados no localStorage
+      // Atualizar o campo obsInput com Restart Race
+      if (obsInput) {
+        obsInput.value = `Restart Race Nº:${corrida}`;
+        console.log(`Updated obsInput with: Restart Race Nº:${corrida}`);
+        obs = obsInput.value; // Atualizar o valor de `obs`
+      } else {
+        console.error("Elemento obsInput não encontrado no DOM para atualização.");
+      }
+    }
+  }
   const newData = {
     corrida: corrida,
     camera: camera,
@@ -858,7 +939,8 @@ function adicionarLinha() {
     obs: obs,
   };
 
-  // Convertendo para JSON e armazenando no localStorage
+  registos.push(newData);
+  localStorage.setItem("dadosTabela", JSON.stringify(registos));
   localStorage.setItem("novaLinhaData", JSON.stringify(newData));
   enviarJson();
   location.reload();
@@ -1050,6 +1132,8 @@ function atualizarTabela(data) {
       // Aplica as classes de cor com base no valor de "curva"
       if (item.curva === "Start") {
           novaLinha.classList.add("post-start");
+      } else if (item.curva === "R-Start") {
+          novaLinha.classList.add("post-rstart");
       } else if (item.curva === "Slow Flag") {
           novaLinha.classList.add("post-slow");
       } else if (item.curva === "Red Flag") {
@@ -1149,7 +1233,7 @@ function atualizarTabela(data) {
       novaLinha.appendChild(HoraCell);
       novaLinha.appendChild(VideoCell);
       novaLinha.appendChild(ReportCell);
- novaLinha.appendChild(NFACell);
+      novaLinha.appendChild(NFACell);
       novaLinha.appendChild(ObsCell);
       novaLinha.appendChild(EditarCell);
       novaLinha.appendChild(ButtonsCell);
@@ -1880,6 +1964,7 @@ function obterStartOrRF(valor) {
     `race${valor}`
   ).value;
 }
+
 
 //Adicionar Camera ou Post no field Curva/Post
 function adicionarCameraOrPost(opcao) {
