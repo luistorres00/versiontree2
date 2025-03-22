@@ -19,7 +19,7 @@ setInterval(updateClock, 1000);
 let campoPesquisa = false;
 
 //Declarado URL's
-const url = "http://192.168.1.87:16082/";
+const url = "http://192.168.50.53:16082/";
 
 //-------------------------------------------------------DOC LISTENERS--------------------------------------------------------
 
@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const userData = JSON.parse(responseData);
   if (!responseData) {
     // Se a variável responseData não existir, redirecione o usuário para index.html
-    window.location.href = "http://192.168.1.87:5500/index.html";
+    window.location.href = "http://192.168.50.53:5500/index.html";
   }
 
   localStorage.setItem("usertype", userData.usertype);
@@ -72,188 +72,282 @@ document.addEventListener("DOMContentLoaded", function () {
 // Chamar a função atualizarPagina a cada 5 segundos
 setInterval(atualizarPagina, 1000);
 
-// Valor para o segundo input numérico no numpad
-document.addEventListener("keydown", function (e) {
-  if (popupNumpadAberto == true) {
-    let curvaInput = document.getElementById("curvaInput");
-    const maxCurvas = localStorage.getItem("numCurvasBD");
-    console.log(maxCurvas);
-    if (
-      e.key == 0 ||
-      e.key == 1 ||
-      e.key == 2 ||
-      e.key == 3 ||
-      e.key == 4 ||
-      e.key == 5 ||
-      e.key == 6 ||
-      e.key == 7 ||
-      e.key == 8 ||
-      e.key == 9
-    ) {
-      curvaInput.value += `${e.key}`;
-      if (Number(curvaInput.value) > maxCurvas) {
-        curvaInput.value = String(maxCurvas);
+// Função para obter a última corrida
+function getLastStartedRace() {
+  let registos = JSON.parse(localStorage.getItem("dadosTabela")) || [];
+  let ultimaCorrida = 0;
+
+  registos.forEach((linha) => {
+    if (linha.curva === "Start" || linha.curva === "R-Start") {
+      let numeroCorrida = parseInt(linha.corrida, 10);
+      if (!isNaN(numeroCorrida) && numeroCorrida > ultimaCorrida) {
+        ultimaCorrida = numeroCorrida;
       }
     }
-  }
-});
+  });
 
-//Atalhos para o numpad (no numpad físico) até 9
+  console.log(`🔍 Última corrida encontrada: ${ultimaCorrida}`);
+  return ultimaCorrida;
+}
+
+// Buffer para armazenar números digitados
+let cameraInputBuffer = "";
+let horaFixada = "";
+let valorCameraBackup = ""; // 🔹 Guarda o valor temporário do cameraInput
+
+// Captura eventos de teclado
 document.addEventListener("keydown", function (e) {
-  //Vai buscar o numero currente de curvas definido
-  const numpadNumbers = localStorage.getItem("numCurvasBD");
+  const cameraInput = document.getElementById("cameraNumber");
+  const horainput = document.getElementById("horainput");
+  const obsInput = document.getElementById("obsInput");
+  const curvaInput = document.getElementById("curvaInput");
+  const maxCurvas = parseInt(localStorage.getItem("numCurvasBD"), 10) || 19;
 
-  // Caso nenhum dos popus estejam abertos
+  // 🔹 Se o usuário está editando um campo, ignorar entrada numérica no cameraInput
   if (
-    popupAberto == false &&
-    popup2Aberto == false &&
-    popupNumpadAberto == false &&
-    popupNumpadPasswordAberto == false &&
-    popupRodaDentada == false &&
-    popupConfiguracoes == false &&
-    campoPesquisa == false
+    document.activeElement === horainput ||
+    document.activeElement === obsInput ||
+    document.activeElement === curvaInput
   ) {
-    for (let i = 1; i <= numpadNumbers; i++) {
-      if (e.key === `${i}`) {
-        abrirPopupNumpad();
-        abrirPopup();
-        obterHoraAtual();
-        obterCurvaNum(i);
-      }
-    }
+    console.log("📝 Usuário está digitando em um campo manualmente. Ignorando entrada.");
+    return;
   }
 
-  if (e.key === "Escape") {
-    fecharPopup();
-    fecharPopupNumpad();
-    fecharPopup2();
-    fecharPopupNumpadPassword();
+  // 🔹 Se um popup diferente do `popupNumpad` estiver aberto, ignorar entrada
+  if (popup2Aberto || popupNumpadPasswordAberto || popupRodaDentada || popupConfiguracoes) {
+    console.log("Outro popup já está aberto. Ignorando entrada numérica.");
+    return;
   }
-});
 
-//
-document.addEventListener("keydown", function (e) {
-  if (
-    popupAberto == false &&
-    popup2Aberto == false &&
-    popupNumpadAberto == false &&
-    popupNumpadPasswordAberto == false &&
-    popupRodaDentada == false &&
-    popupConfiguracoes == false &&
-    campoPesquisa == false
-  ) {
-    let corrida = localStorage.getItem("numCorridas");
-    let redFlagCorrida = localStorage.getItem("redFlagCorrida"); // Recupera a corrida salva do Red Flag
-
-    // Garantir que 'corrida' seja um número válido
-    if (!corrida || isNaN(corrida)) {
-      corrida = 1; // Valor inicial se não existir
-    } else {
-      corrida = parseInt(corrida, 10);
+  // 🔹 Se um número for pressionado
+  if (e.key >= "0" && e.key <= "9") {
+    if (cameraInputBuffer === "") {
+      horaFixada = obterHoraAtual();
+      console.log(`🕒 Hora fixada: ${horaFixada}`);
     }
 
-    // 🔍 Buscar a última corrida real na tabela antes de incrementar
-    let tabela = document.getElementById("tabela");
-    let ultimaCorridaNaTabela = 1; // Se não houver dados, começa da 1
+    cameraInputBuffer += e.key;
 
-    if (tabela && tabela.rows.length > 1) {
-      for (let i = tabela.rows.length - 1; i > 0; i--) {
-        let corridaNaLinha = tabela.rows[i].cells[10]?.textContent.trim(); // Coluna da corrida
-        if (corridaNaLinha && !isNaN(corridaNaLinha)) {
-          ultimaCorridaNaTabela = parseInt(corridaNaLinha, 10);
-          break; // Achou a última corrida válida
-        }
+    if (parseInt(cameraInputBuffer, 10) > maxCurvas) {
+      cameraInputBuffer = String(maxCurvas);
+    }
+
+    // 🔹 Atualiza o campo da câmera
+    if (cameraInput) {
+      cameraInput.value = cameraInputBuffer;
+    }
+
+    // 🔹 Se o popup já está aberto, apenas atualiza o input SEM abrir novamente
+    if (popupNumpadAberto) {
+      atualizarCameraInput();
+      return;
+    }
+
+    // 🔹 Se o popup ainda não está aberto, abre e preenche o input
+    abrirPopupNumpad();
+    abrirPopup();
+    obterHoraAtual();
+    atualizarCameraInput();
+  }
+
+ // 🔹 Lógica para o botão "Turn" (passa número da câmera para curva)
+if (e.key === "t" || e.key === "T") {
+  if (cameraInput) {
+      let numericValue = cameraInput.value.match(/\d+/g); // 🔥 Captura apenas números
+      if (numericValue) {
+          curvaInput.value = numericValue + " Turn"; // 🔥 Adiciona "Turn"
+          valorCameraBackup = numericValue; // 🔄 Guarda o número
+          cameraInput.value = ""; // 🔄 Limpa o campo da câmera
+          console.log(`✅ Valor "${numericValue}" transferido para curvaInput.`);
       }
-    }
+  }
+}
 
+// 🔹 Lógica para o botão "Camera" (passa número da curva para câmera)
+if (e.key === "c" || e.key === "C") {
+  if (curvaInput) {
+      let numericValue = curvaInput.value.match(/\d+/g); // 🔥 Captura apenas números
+      if (numericValue) {
+          cameraInput.value = numericValue + " Cam"; // 🔥 Adiciona "Cam"
+          curvaInput.value = ""; // 🔄 Limpa o campo de curva
+          console.log(`📷 Valor "${numericValue}" transferido para cameraInput.`);
+      }
+  }
+}
+
+  // 📌 Gerenciar eventos de corrida
+  if (!popupAberto && !popup2Aberto && !popupNumpadAberto && !popupNumpadPasswordAberto && !popupRodaDentada && !popupConfiguracoes) {
+    let redFlagCorrida = localStorage.getItem("redFlagCorrida");
+    let ultimaCorridaStart = getLastStartedRace();
     if (document.readyState === "complete") {
       setTimeout(() => {
         if (e.key === "p" || e.key === "P") {
-          let curvaInputValue = "Start"; // Valor padrão para coluna Curva
-
-          // 🔄 Atualizar corrida atual com base na tabela
-          corrida = ultimaCorridaNaTabela;
-
-          if (redFlagCorrida) {
-            // Se existe Red Flag, perguntar se é nova corrida ou restart
-            let isNewRace = confirm("Red Flag Detected! New race or Restart?\nOK for new race, Cancel for restart.");
-
-            if (!isNewRace) {
-              // Reiniciar a corrida do Red Flag
-              corrida = parseInt(redFlagCorrida, 10);
-              localStorage.removeItem("redFlagCorrida"); // Limpar o Red Flag
-              curvaInputValue = "R-Start"; // Indicar reinício na coluna Curva
-
-              // Atualizar o obsInput com "Race Nº:X"
-              let obsElement = document.getElementById("obsInput");
-              if (obsElement) {
-                obsElement.value = `Race Nº:${corrida}`;
-                console.log(`obsInput atualizado para: Race Nº:${corrida}`);
-              } else {
-                console.error("Elemento obsInput não encontrado no DOM.");
-              }
-            } else {
-              // Incrementar para nova corrida
-              corrida += 1;
-            }
-          } else {
-            // Se não há Red Flag, incrementa baseado na última corrida real na tabela
-            corrida += 1;
-          }
-
-          // Atualizar o inputCorrida
-          document.getElementById("inputCorrida").value = corrida;
-
-          let obsElement = document.getElementById("obsInput");
-          if (obsElement) {
-            let obsInput = obsElement.value;
-            if (!obsInput.includes(`Race Nº:${corrida}`)) {
-              //obsElement.value = `Race Nº:${corrida}`;
-            }
-          } else {
-            console.error("Elemento obsInput não encontrado no DOM.");
-          }
-
-          // Salvar no localStorage
-          localStorage.setItem("numCorridas", corrida);
-
-          // Adicionar nova linha
-          document.getElementById("curvaInput").value = curvaInputValue;
-          obterHoraAtual();
-          adicionarLinha();
-
-          console.log(`Corrida: ${corrida}, Curva: ${curvaInputValue}, Red Flag antes do Start: ${!!redFlagCorrida}`);
+          iniciarOuReiniciarCorrida(redFlagCorrida, ultimaCorridaStart);
         } else if (e.key === "r" || e.key === "R") {
-          // Quando ocorre um Red Flag, salva o número da corrida atual
-          localStorage.setItem("redFlagCorrida", corrida);
-
+          localStorage.setItem("redFlagCorrida", ultimaCorridaStart);
           document.getElementById("curvaInput").value = "Red Flag";
           obterHoraAtual();
           adicionarLinha();
-
-          console.log(`Red Flag na corrida: ${corrida}`);
         } else if (e.key === "s" || e.key === "S") {
           document.getElementById("curvaInput").value = "Slow Flag";
           obterHoraAtual();
           adicionarLinha();
         }
-        document.addEventListener("keydown", function (e) {
-          if (popupNumpadAberto == true) { // 🔥 Agora funciona com o popup aberto!
-            if (e.key === "c" || e.key === "C") {
-              let numpadInput = document.getElementById("numpadInput"); // 🔹 Onde o número é inserido no popup
-              let cameraInput = document.getElementById("cameraNumber"); // 🔹 Campo onde queremos armazenar
-        
-              if (numpadInput && cameraInput && numpadInput.value.trim() !== "") {
-                cameraInput.value = numpadInput.value; // 🔥 Move o valor do popup para Camera
-                numpadInput.value = ""; // 🔥 Limpa o campo do popup
-        
-                console.log(`Número ${cameraInput.value} definido como Câmera.`);
+      }, 300);
+    }
+  }
+
+  // 🔹 Fechar popups ao pressionar ESC
+  if (e.key === "Escape") {
+    fecharPopupIndividual();
+  }
+});
+
+// 🔹 Função para atualizar o campo da câmera no popup
+function atualizarCameraInput() {
+  setTimeout(() => {
+    let cameraInputInside = document.getElementById("cameraNumber");
+    if (cameraInputInside) {
+      cameraInputInside.value = cameraInputBuffer;
+    }
+  }, 100);
+}
+
+// 🔹 Função para obter a hora atual
+function obterHoraAtual() {
+  let agora = new Date();
+  return agora.toLocaleTimeString();
+}
+
+// 🔹 Função para fechar apenas o popup que estiver aberto
+function fecharPopupIndividual() {
+  console.log("ESC pressionado. Verificando popups para fechar...");
+
+  if (popupNumpadAberto) {
+    fecharPopupNumpad();
+    popupNumpadAberto = false;
+    limparBuffer();
+    console.log("Popup numpad fechado.");
+    return;
+  }
+
+  if (popupNumpadPasswordAberto) {
+    fecharPopupNumpadPassword();
+    popupNumpadPasswordAberto = false;
+    console.log("Popup numpad password fechado.");
+    return;
+  }
+
+  if (popup2Aberto) {
+    fecharPopup2();
+    popup2Aberto = false;
+    console.log("Popup 2 fechado.");
+    return;
+  }
+
+  if (popupAberto) {
+    fecharPopup();
+    popupAberto = false;
+    limparBuffer();
+    console.log("Popup principal fechado.");
+    return;
+  }
+
+  console.log("Nenhum popup estava aberto.");
+}
+
+// 🔹 Função para limpar o buffer quando o popup é fechado sem inserir dados
+function limparBuffer() {
+  console.log("Limpando buffer...");
+  cameraInputBuffer = "";
+  const cameraInput = document.getElementById("cameraNumber");
+  if (cameraInput) {
+    cameraInput.value = "";
+  }
+}
+
+
+// 📌 Segunda parte do código que gerencia corridas e eventos
+document.addEventListener("keydown", function (e) {
+  if (
+    !popupAberto &&
+    !popup2Aberto &&
+    !popupNumpadAberto &&
+    !popupNumpadPasswordAberto &&
+    !popupRodaDentada &&
+    !popupConfiguracoes &&
+    !campoPesquisa
+  ) {
+    let redFlagCorrida = localStorage.getItem("redFlagCorrida");
+    let ultimaCorridaStart = getLastStartedRace(); // 🔍 Busca a última corrida iniciada
+    let corrida;
+
+    if (document.readyState === "complete") {
+      setTimeout(() => {
+        if (e.key === "p" || e.key === "P") {
+          let curvaInputValue = "Start"; // Padrão para nova corrida
+          let obsValue = "";
+
+          if (redFlagCorrida !== null && redFlagCorrida !== "null") { // 🔹 Verifica se existe Red Flag corretamente
+            console.log("🚩 Red Flag detectada! Perguntando ao usuário...");
+            
+            let isNewRace = confirm(
+              "Red Flag Detected! New race or Restart?\nOK for new race, Cancel for restart."
+            );
+
+            if (!isNewRace) {
+              // 🔄 É um Restart, mantém a MESMA corrida
+              corrida = parseInt(redFlagCorrida, 10);
+              curvaInputValue = "R-Start"; // Indica reinício na curva
+              obsValue = `Restart Race Nº:${corrida}`;
+
+              // 🔄 Atualiza o obsInput no DOM
+              let obsElement = document.getElementById("obsInput");
+              if (obsElement) {
+                obsElement.value = obsValue;
+                console.log(`obsInput atualizado para: ${obsValue}`);
               } else {
-                console.warn("Campo 'numpadInput' está vazio ou não encontrado.");
+                console.error("Elemento obsInput não encontrado no DOM.");
               }
+            } else {
+              // ➕ Se for uma nova corrida, pega o último Start e soma 1
+              corrida = ultimaCorridaStart + 1;
+              localStorage.setItem("numCorridas", corrida);
             }
+
+            // 🔄 Agora pode remover a Red Flag, pois o valor foi utilizado
+            localStorage.removeItem("redFlagCorrida");
+          } else {
+            // ➕ Se não há Red Flag, inicia a próxima corrida normal
+            corrida = ultimaCorridaStart + 1;
+            localStorage.setItem("numCorridas", corrida);
           }
-        });
+
+          // 🔄 Atualizar o inputCorrida no DOM
+          document.getElementById("inputCorrida").value = corrida;
+
+          // 🔥 Adicionar linha à tabela
+          document.getElementById("curvaInput").value = curvaInputValue;
+
+          // 🔄 Se houver uma observação de Restart, ela será usada
+          let obsInput = document.getElementById("obsInput");
+          if (obsInput) obsInput.value = obsValue;
+
+          obterHoraAtual();
+          adicionarLinha();
+
+          console.log(`Corrida: ${corrida}, Curva: ${curvaInputValue}, Último Start: ${ultimaCorridaStart}`);
+        }
+
+        // 🔴 Lidar com tecla "R" para Red Flag
+        /*else if (e.key === "r" || e.key === "R") {
+          console.log(`⚠️ Red Flag ativada! Salvando corrida ${ultimaCorridaStart}`);
+          localStorage.setItem("redFlagCorrida", ultimaCorridaStart);
+          document.getElementById("curvaInput").value = "Red Flag";
+          obterHoraAtual();
+          adicionarLinha();
+          console.log(`Red Flag salva na corrida: ${ultimaCorridaStart}`);
+        }*/
       }, 300);
     }
   }
@@ -452,7 +546,7 @@ document.addEventListener("DOMContentLoaded", function () {
     logoutButton.addEventListener("click", function () {
       // Fazer solicitação para logout
       console.log("1");
-      fetch("http://192.168.1.87:16082/auth/logout", {
+      fetch("http://192.168.50.53:16082/auth/logout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -489,7 +583,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function carregarDados() {
   // Definir o IP/URL para onde enviar os dados
-  const url = "http://192.168.1.87:16082/getData";
+  const url = "http://192.168.50.53:16082/getData";
 
   fetch(url)
     .then((response) => response.json())
@@ -517,7 +611,7 @@ function inputRace() {
   if (rname != null) {
     document.getElementById("header").innerHTML = rname;
     // Enviar o nome da corrida para o backend
-    fetch("http://192.168.1.87:16082/addRace", {
+    fetch("http://192.168.50.53:16082/addRace", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -541,7 +635,7 @@ function inputRace() {
 
 //Muda o nome da corrida para a ultima da tabela
 function updateHeaderWithLastRaceText() {
-  fetch("http://192.168.1.87:16082/getLRace")
+  fetch("http://192.168.50.53:16082/getLRace")
     .then((response) => {
       if (!response.ok) {
         throw new Error("Erro ao obter o texto da última corrida");
@@ -724,7 +818,7 @@ function getData() {
     return Promise.resolve(null); // Retorna uma promessa resolvida com null se algum popup estiver aberto
   }
 
-  const url = "http://192.168.1.87:16082/getData";
+  const url = "http://192.168.50.53:16082/getData";
 
   return fetch(url)
     .then((response) => response.json())
@@ -955,7 +1049,7 @@ function enviarJson() {
   console.log(localStorageData);
 
   // Definir o IP/URL para onde enviar os dados
-  const url = "http://192.168.1.87:16082/addData";
+  const url = "http://192.168.50.53:16082/addData";
 
   // Verificar se existem dados no localStorage
   if (localStorageData) {
@@ -1059,7 +1153,7 @@ function envUpJson() {
     // Define o ID do documento a ser atualizado (obtido do localStorage)
     const id = updatedData._id;
     // Definir o IP/URL para onde enviar os dados
-    const url = `http://192.168.1.87:16082/updateData/${id}`;
+    const url = `http://192.168.50.53:16082/updateData/${id}`;
     // Envia os dados atualizados para o servidor
     fetch(url, {
       method: "PUT",
@@ -1094,7 +1188,7 @@ function deleteLinha() {
   // Verifica se o ID está disponível nos detalhes
   if (detalhes && detalhes._id) {
     // Faz uma solicitação DELETE para excluir a linha com o ID especificado
-    fetch(`http://192.168.1.87:16082/dropData/${detalhes._id}`, {
+    fetch(`http://192.168.50.53:16082/dropData/${detalhes._id}`, {
       method: "DELETE",
     })
       .then((response) => {
@@ -1282,7 +1376,7 @@ function limparTabela() {
   }
 
   // Definir o IP/URL para onde enviar os dados
-  const url = "http://192.168.1.87:16082/dropData";
+  const url = "http://192.168.50.53:16082/dropData";
 
   fetch(url, {
     method: "POST",
@@ -1357,7 +1451,7 @@ function enviarJsonNumpad() {
   const localStorageData = localStorage.getItem("novoNumpadNum");
 
   // Definir o IP/URL para onde enviar os dados
-  const url = "http://192.168.1.87:16082/addDataNumpad";
+  const url = "http://192.168.50.53:16082/addDataNumpad";
 
   // Verificar se existem dados no localStorage
   if (localStorageData) {
@@ -1419,7 +1513,7 @@ function envUpNumpadJson() {
     // Define o ID do documento a ser atualizado (obtido do localStorage)
     const id = updatedData._id;
     // Definir o IP/URL para onde enviar os dados
-    const url = `http://192.168.1.87:16082/updateNumpad/${id}`;
+    const url = `http://192.168.50.53:16082/updateNumpad/${id}`;
     // Envia os dados atualizados para o servidor
     console.log(updatedData);
     fetch(url, {
@@ -1450,7 +1544,7 @@ function envUpNumpadJson() {
 // Dar reset ao numero de numpad
 function eliminarNumpadNum() {
   // Definir o IP/URL para onde enviar os dados
-  const url = "http://192.168.1.87:16082/dropDataNumpad";
+  const url = "http://192.168.50.53:16082/dropDataNumpad";
 
   fetch(url, {
     method: "POST",
@@ -1966,17 +2060,27 @@ function obterStartOrRF(valor) {
 }
 
 
-//Adicionar Camera ou Post no field Curva/Post
 function adicionarCameraOrPost(opcao) {
-  if (opcao != "Camera") {
-    document.getElementById("cameraNumber").value = "";
-    document.getElementById("curvaInput").value += document.getElementById(
-      `opcao${opcao}`
-    ).value;
-  } else {
-    document.getElementById("cameraNumber").value =
-      document.getElementById("curvaInput").value;
-    document.getElementById("curvaInput").value = "";
+  const cameraInput = document.getElementById("cameraNumber");
+  const curvaInput = document.getElementById("curvaInput");
+
+  if (opcao === "Turn") {
+    if (cameraInput.value.trim() !== "") {
+      valorCameraBackup = cameraInput.value; // Armazena o valor antes de limpar
+      curvaInput.value = `Turn ${cameraInput.value}`; // Transfere com "Turn"
+      cameraInput.value = ""; // Limpa o campo da câmera
+      console.log(`✅ Valor "${valorCameraBackup}" transferido para curvaInput com "Turn".`);
+    } else {
+      console.warn("⚠️ Nenhum valor na câmera para transferir!");
+    }
+  } else if (opcao === "Camera") {
+    if (curvaInput.value.trim() !== "") {
+      cameraInput.value = `Cam ${valorCameraBackup}`; // Restaura com "Cam"
+      curvaInput.value = ""; // Limpa o campo da curva
+      console.log(`🔄 Valor restaurado para cameraInput com "Cam": "${cameraInput.value}"`);
+    } else {
+      console.warn("⚠️ Nenhum valor em curvaInput para restaurar para a câmera!");
+    }
   }
 }
 
@@ -2184,7 +2288,7 @@ function updatePosition() {
     // Define o ID do documento a ser atualizado (obtido do localStorage)
     const id = updatedData1._id;
     // Definir o IP/URL para onde enviar os dados
-    const url = `http://192.168.1.87:16082/updateData/${id}`;
+    const url = `http://192.168.50.53:16082/updateData/${id}`;
     // Envia os dados atualizados para o servidor
     fetch(url, {
       method: "PUT",
@@ -2214,7 +2318,7 @@ function updatePosition() {
     const id2 = updatedData2._id;
 
     // Definir o IP/URL para onde enviar os dados
-    const url2 = `http://192.168.1.87:16082/updateData/${id2}`;
+    const url2 = `http://192.168.50.53:16082/updateData/${id2}`;
 
     // Envia os dados atualizados para o servidor
     fetch(url2, {
@@ -2295,7 +2399,7 @@ function resetCorridas() {
 // Carregar opções para Obs
 function carregarObsOptions() {
   // Definir o IP/URL para onde enviar os dados
-  const url = "http://192.168.1.87:16082/getObsOptions";
+  const url = "http://192.168.50.53:16082/getObsOptions";
 
   fetch(url)
     .then((response) => response.json())
@@ -2325,7 +2429,7 @@ function enviarObsOptionJson() {
   console.log(localStorageData);
 
   // Definir o IP/URL para onde enviar os dados
-  const url = "http://192.168.1.87:16082/addObsOptions";
+  const url = "http://192.168.50.53:16082/addObsOptions";
 
   // Verificar se existem dados no localStorage
   if (localStorageData) {
