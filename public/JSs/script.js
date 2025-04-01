@@ -19,7 +19,7 @@ setInterval(updateClock, 1000);
 let campoPesquisa = false;
 
 //Declarado URL's
-const url = "http://192.168.50.53:16082/";
+const url = "http://192.168.1.107:16082/";
 
 //-------------------------------------------------------DOC LISTENERS--------------------------------------------------------
 
@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const userData = JSON.parse(responseData);
   if (!responseData) {
     // Se a variável responseData não existir, redirecione o usuário para index.html
-    window.location.href = "http://192.168.50.53:5500/index.html";
+    window.location.href = "http://192.168.1.107:5500/index.html";
   }
 
   localStorage.setItem("usertype", userData.usertype);
@@ -546,7 +546,7 @@ document.addEventListener("DOMContentLoaded", function () {
     logoutButton.addEventListener("click", function () {
       // Fazer solicitação para logout
       console.log("1");
-      fetch("http://192.168.50.53:16082/auth/logout", {
+      fetch("http://192.168.1.107:16082/auth/logout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -583,7 +583,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function carregarDados() {
   // Definir o IP/URL para onde enviar os dados
-  const url = "http://192.168.50.53:16082/getData";
+  const url = "http://192.168.1.107:16082/getData";
 
   fetch(url)
     .then((response) => response.json())
@@ -611,7 +611,7 @@ function inputRace() {
   if (rname != null) {
     document.getElementById("header").innerHTML = rname;
     // Enviar o nome da corrida para o backend
-    fetch("http://192.168.50.53:16082/addRace", {
+    fetch("http://192.168.1.107:16082/addRace", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -635,7 +635,7 @@ function inputRace() {
 
 //Muda o nome da corrida para a ultima da tabela
 function updateHeaderWithLastRaceText() {
-  fetch("http://192.168.50.53:16082/getLRace")
+  fetch("http://192.168.1.107:16082/getLRace")
     .then((response) => {
       if (!response.ok) {
         throw new Error("Erro ao obter o texto da última corrida");
@@ -669,6 +669,13 @@ function limparLS() {
 
 //abre o popup
 function abrirPopup() {
+  // Obter o número da última corrida iniciada
+  const ultimaCorridaStart = getLastStartedRace();
+  
+  // Definir o valor no inputCorrida
+  document.getElementById("inputCorrida").value = ultimaCorridaStart;
+  
+  // Abrir o popup normalmente
   document.getElementById("popup").style.display = "flex";
   popupAberto = true;
 }
@@ -677,8 +684,18 @@ function abrirPopup() {
 function abrirPopup2() {
   document.getElementById("popup2").style.display = "flex";
   popup2Aberto = true;
+ 
+  // Adiciona novo listener
+  document.addEventListener("keydown", handleEscape);
+  
+  function handleEscape(event) {
+    if (event.key === "Escape") {
+      fecharPopup2();
+      // Remove o listener após fechar
+      document.removeEventListener("keydown", handleEscape);
+    }
+  }
 }
-
 // Abre popup numpad
 function abrirPopupNumpad() {
   const popupNumpad = document.getElementById('popupNumpad');
@@ -818,7 +835,7 @@ function getData() {
     return Promise.resolve(null); // Retorna uma promessa resolvida com null se algum popup estiver aberto
   }
 
-  const url = "http://192.168.50.53:16082/getData";
+  const url = "http://192.168.1.107:16082/getData";
 
   return fetch(url)
     .then((response) => response.json())
@@ -1049,7 +1066,7 @@ function enviarJson() {
   console.log(localStorageData);
 
   // Definir o IP/URL para onde enviar os dados
-  const url = "http://192.168.50.53:16082/addData";
+  const url = "http://192.168.1.107:16082/addData";
 
   // Verificar se existem dados no localStorage
   if (localStorageData) {
@@ -1153,7 +1170,7 @@ function envUpJson() {
     // Define o ID do documento a ser atualizado (obtido do localStorage)
     const id = updatedData._id;
     // Definir o IP/URL para onde enviar os dados
-    const url = `http://192.168.50.53:16082/updateData/${id}`;
+    const url = `http://192.168.1.107:16082/updateData/${id}`;
     // Envia os dados atualizados para o servidor
     fetch(url, {
       method: "PUT",
@@ -1188,7 +1205,7 @@ function deleteLinha() {
   // Verifica se o ID está disponível nos detalhes
   if (detalhes && detalhes._id) {
     // Faz uma solicitação DELETE para excluir a linha com o ID especificado
-    fetch(`http://192.168.50.53:16082/dropData/${detalhes._id}`, {
+    fetch(`http://192.168.1.107:16082/dropData/${detalhes._id}`, {
       method: "DELETE",
     })
       .then((response) => {
@@ -1376,7 +1393,7 @@ function limparTabela() {
   }
 
   // Definir o IP/URL para onde enviar os dados
-  const url = "http://192.168.50.53:16082/dropData";
+  const url = "http://192.168.1.107:16082/dropData";
 
   fetch(url, {
     method: "POST",
@@ -1451,7 +1468,7 @@ function enviarJsonNumpad() {
   const localStorageData = localStorage.getItem("novoNumpadNum");
 
   // Definir o IP/URL para onde enviar os dados
-  const url = "http://192.168.50.53:16082/addDataNumpad";
+  const url = "http://192.168.1.107:16082/addDataNumpad";
 
   // Verificar se existem dados no localStorage
   if (localStorageData) {
@@ -1513,7 +1530,7 @@ function envUpNumpadJson() {
     // Define o ID do documento a ser atualizado (obtido do localStorage)
     const id = updatedData._id;
     // Definir o IP/URL para onde enviar os dados
-    const url = `http://192.168.50.53:16082/updateNumpad/${id}`;
+    const url = `http://192.168.1.107:16082/updateNumpad/${id}`;
     // Envia os dados atualizados para o servidor
     console.log(updatedData);
     fetch(url, {
@@ -1544,7 +1561,7 @@ function envUpNumpadJson() {
 // Dar reset ao numero de numpad
 function eliminarNumpadNum() {
   // Definir o IP/URL para onde enviar os dados
-  const url = "http://192.168.50.53:16082/dropDataNumpad";
+  const url = "http://192.168.1.107:16082/dropDataNumpad";
 
   fetch(url, {
     method: "POST",
@@ -2288,7 +2305,7 @@ function updatePosition() {
     // Define o ID do documento a ser atualizado (obtido do localStorage)
     const id = updatedData1._id;
     // Definir o IP/URL para onde enviar os dados
-    const url = `http://192.168.50.53:16082/updateData/${id}`;
+    const url = `http://192.168.1.107:16082/updateData/${id}`;
     // Envia os dados atualizados para o servidor
     fetch(url, {
       method: "PUT",
@@ -2318,7 +2335,7 @@ function updatePosition() {
     const id2 = updatedData2._id;
 
     // Definir o IP/URL para onde enviar os dados
-    const url2 = `http://192.168.50.53:16082/updateData/${id2}`;
+    const url2 = `http://192.168.1.107:16082/updateData/${id2}`;
 
     // Envia os dados atualizados para o servidor
     fetch(url2, {
@@ -2399,7 +2416,7 @@ function resetCorridas() {
 // Carregar opções para Obs
 function carregarObsOptions() {
   // Definir o IP/URL para onde enviar os dados
-  const url = "http://192.168.50.53:16082/getObsOptions";
+  const url = "http://192.168.1.107:16082/getObsOptions";
 
   fetch(url)
     .then((response) => response.json())
@@ -2429,7 +2446,7 @@ function enviarObsOptionJson() {
   console.log(localStorageData);
 
   // Definir o IP/URL para onde enviar os dados
-  const url = "http://192.168.50.53:16082/addObsOptions";
+  const url = "http://192.168.1.107:16082/addObsOptions";
 
   // Verificar se existem dados no localStorage
   if (localStorageData) {
