@@ -6,6 +6,41 @@ html, body {
   overflow-y: auto;
 }
 
+
+@media (min-width: 400px) and (max-width: 633px) {
+  body {
+    font-size: 13px;
+  }
+
+  .container {
+    padding: 10px;
+  }
+}
+
+
+/* Para tablets*/
+@media (min-width: 700px) and (max-width: 1024px) {
+  body {
+    font-size: 16px;
+  }
+
+  .container {
+    padding: 20px;
+  }
+}
+
+/* Para Pc*/
+@media (min-width: 1025px) and (max-width: 1920px) {
+  body {
+    font-size: 18px;
+  }
+
+  .container {
+    max-width: 150%;
+    margin: 0 auto;
+  }
+}
+
 body {
   font-family: 'Arial', Helvetica, sans-serif;
   margin: 20px;
@@ -19,6 +54,12 @@ body {
     src: url('fonts/arial.woff') format('woff'); /* Ajuste o caminho e formato conforme necessário */
     font-weight: normal;
     font-style: normal;
+}
+
+container{
+  display: flex;
+  flex-wrap: wrap; /* Permite que os elementos se ajustem automaticamente */
+  justify-content: space-between;
 }
 
 #logo {
@@ -41,14 +82,24 @@ body {
 
 /* Estilo para centrar a tabela das pesquisas */
 #pesquisaObs {
-  display: flex; /* Usar flexbox para alinhar os itens horizontalmente */
-  align-items: center; /* Alinha verticalmente */
-  justify-content: space-between; /* Espaço entre os itens */
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centraliza a barra */
+  gap: 10px; /* Espaço entre os elementos */
+  padding: 8px;
+  border-radius: 8px; /* Bordas arredondadas */
+  max-width: 600px; /* Limite de largura */
+  width: 100%;
 }
 
+/* Input de pesquisa */
 #pesquisa {
-  flex-grow: 1; /* Permite que o input ocupe o espaço disponível */
-  margin-right: 10px; /* Espaço entre o input e o ícone */
+  flex-grow: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: border-color 0.3s ease-in-out;
 }
 
 /* Estilo para centralizar os botões */
@@ -313,13 +364,13 @@ td[data-report="true"] {
 
 #tabela thead th {
   position: sticky;
-  top: 0;
+  top: -1;
   background-color: white;
   padding: 8px;
   border: 1px solid #ddd;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   white-space: nowrap;
-  z-index: 10; /* Aumentar z-index para ficar acima dos checkboxes */
+  z-index: 15; /* Aumentar z-index para ficar acima dos checkboxes */
 }
 
 #tabela th {
@@ -381,7 +432,7 @@ td[data-report="true"] {
 }
 
 /* Larguras responsivas */
-@media screen and (min-width: 1367px) {
+@media screen and (min-width: 400px) and (max-width:1920px){
   .table-container { width: 60%; }
   #logo { width: 220px; }
   #numpad {
@@ -947,20 +998,20 @@ tr.highlight {
 
 .popup {
   position: fixed; /* Fica no lugar */
-  left: 50%; /* Move para o meio da tela horizontalmente */
-  top: 50%; /* Move para o meio da tela verticalmente */
-  transform: translate(-50%, -50%); /* Ajusta a posição para centralizar */
+  left: 60%; /* Move para o meio da tela horizontalmente */
+  top: 60%; /* Move para o meio da tela verticalmente */
+  transform: translate(-60%, -60%); /* Ajusta a posição para centralizar */
   width: 100%; /* Largura responsiva */
   max-width: 1000px; /* Aumenta a largura máxima para 1000px */
   height: auto; /* Altura automática */
-  background-color: rgba(0, 0, 0, 0.5); /* Fundo preto com opacidade */
   z-index: 1; /* Fica na frente */
   overflow: auto; /* Habilita rolagem se necessário */
-}
+  }
+
 
 .popup-content {
   background-color: #fefefe;
-  padding: 20px; /* Reduzir padding se necessário */
+  padding: 80px; /* Reduzir padding se necessário */
   border: 1px solid #888;
   width: 100%; /* Largura 100% do contêiner */
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
@@ -1428,11 +1479,11 @@ input[type="checkbox"] {
 #extraButtons {
   width: 25%;
   position: fixed;
-  top: 42vh;
-  transform: translateY(-50%);
+  top: 50vh;
+  transform: translateY(-20%);   /* Subir ou descer botões*/
   left: 0vw;
   text-align: left;
-  margin-left: 0vw;
+  margin-left: 4vw;
 }
 
 #btnGreen {
@@ -1516,10 +1567,13 @@ input[type="checkbox"] {
   z-index: 10006;
 }
 
-.buttaoUpDown{
-  margin-bottom: 0;
-  height: 5vh;
+/* ja nao aparece */
+.buttaoUpDown {
+  margin-bottom: initial !important;
+  height: auto !important;
+  display: none !important;
 }
+
 
 /* Media queries para responsividade dos botões */
 @media screen and (max-width: 1366px) {
@@ -1742,7 +1796,7 @@ input[type="checkbox"] {
 #tabela th, #tabela td {
   border: 1px solid #ddd;
   text-align: center; /* Centraliza texto e ícones */
-  padding-top: 15px;
+  padding-top: 20px;
 }
 
 #tabela td.obs {
@@ -1782,7 +1836,7 @@ input[type="checkbox"] {
   margin-bottom: 15px; /* Aumentando o espaçamento entre os checkboxes */
 }
 
-.popup button, .popup input, .popup select, .popup textarea {
+/*.popup button*/ .popup input, .popup select, .popup textarea {
   font-size: 16px; /* Ajustar o tamanho da fonte para todos os itens do popup */
   padding: 12px; /* Ajustar o padding para botões, inputs, selects e textarea */
   text-align: center;
@@ -1913,10 +1967,10 @@ input[type="checkbox"]:checked::before {
     display: block; /* Garante que a textarea seja um bloco */
 }
 #searchCorrida {
-  color: white;
+  color: rgb(0, 0, 0);
 }
 #searchCorrida {
-  color: white;
+  color: rgb(255, 255, 255);
 }
 #videoCheck,
 #reportCheck,
