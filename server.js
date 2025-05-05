@@ -1,4 +1,3 @@
-//utilizações require
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
@@ -26,8 +25,8 @@ const certPath = path.join(pwaPath, "192.168.1.148.pem");
 // Verificação de Existência de Arquivos
 if (!fs.existsSync(keyPath)) {
   console.error(`Arquivo de chave SSL não encontrado: ${keyPath}`);
-  process.exit(1);
-}
+    process.exit(1);
+  }
 
 if (!fs.existsSync(certPath)) {
   console.error(`Arquivo de certificado SSL não encontrado: ${certPath}`);
@@ -78,4 +77,4 @@ app.listen(port, () => {
 // Iniciar servidor HTTPS
 https.createServer(options, app).listen(443, () => {
   console.log(`Servidor HTTPS rodando em https://localhost:${port}`);
-});
+  });
