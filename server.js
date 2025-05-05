@@ -1,4 +1,3 @@
-//utilizações require
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
@@ -20,8 +19,8 @@ const {
 const app = express();
 const pwaPath = path.join(__dirname, "public", "pwa"); // Caminho ajustado
 
-const keyPath = path.join(pwaPath, "192.168.1.148-key.pem");
-const certPath = path.join(pwaPath, "192.168.1.148.pem");
+const keyPath = path.join(pwaPath, "localhost+2-key.pem");
+const certPath = path.join(pwaPath, "localhost+2.pem");
 
 // Verificação de Existência de Arquivos
 if (!fs.existsSync(keyPath)) {
@@ -35,8 +34,8 @@ if (!fs.existsSync(certPath)) {
 }
 
 const options = {
-  key: fs.readFileSync(path.resolve(pwaPath, "192.168.1.148-key.pem")),
-  cert: fs.readFileSync(path.resolve(pwaPath, "192.168.1.148.pem")),
+  key: fs.readFileSync(path.resolve(pwaPath, "localhost+2-key.pem")),
+  cert: fs.readFileSync(path.resolve(pwaPath, "localhost+2.pem")),
 };
 const port = process.env.PORT || 16082;
 
@@ -48,9 +47,30 @@ app.use(
 );
 
 // Conectar ao MongoDB
-mongoose.connect("mongodb://localhost:27017/local", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+mongoose
+  .connect("mongodb://localhost:27017/local")
+  .then(() => {
+    console.log("MongoDB is connected");
+    // Start the server only after DB connection
+    app.listen(port, () => {
+      console.log(`Servidor rodando em http://localhost:${port}`);
+    });
+    https.createServer(options, app).listen(443, () => {
+      console.log(`Servidor HTTPS rodando em https://localhost:${port}`);
+    });
+  })
+  .catch((err) => {
+    console.error("MongoDB connection error:", err);
+  });
+
+mongoose.connection.on("connected", () => {
+  console.log("MongoDB connected");
+});
+mongoose.connection.on("disconnected", () => {
+  console.log("MongoDB disconnected");
+});
+mongoose.connection.on("error", (err) => {
+  console.error("MongoDB connection error:", err);
 });
 
 // Middleware para análise de dados JSON
@@ -70,12 +90,3 @@ app.use("/auth", authRoutes);
 //use routing
 app.use(express.json());
 app.use(routes);
-
-app.listen(port, () => {
-  console.log(`Servidor rodando em http://localhost:${port}`);
-});
-
-// Iniciar servidor HTTPS
-https.createServer(options, app).listen(443, () => {
-  console.log(`Servidor HTTPS rodando em https://localhost:${port}`);
-});
