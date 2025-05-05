@@ -25,8 +25,8 @@ const certPath = path.join(pwaPath, "localhost+2.pem");
 // Verificação de Existência de Arquivos
 if (!fs.existsSync(keyPath)) {
   console.error(`Arquivo de chave SSL não encontrado: ${keyPath}`);
-  process.exit(1);
-}
+    process.exit(1);
+  }
 
 if (!fs.existsSync(certPath)) {
   console.error(`Arquivo de certificado SSL não encontrado: ${certPath}`);
@@ -90,3 +90,15 @@ app.use("/auth", authRoutes);
 //use routing
 app.use(express.json());
 app.use(routes);
+<<<<<<< HEAD
+=======
+
+app.listen(port, () => {
+  console.log(`Servidor rodando em http://localhost:${port}`);
+});
+
+// Iniciar servidor HTTPS
+https.createServer(options, app).listen(443, () => {
+  console.log(`Servidor HTTPS rodando em https://localhost:${port}`);
+  });
+>>>>>>> 8321d8712aaeeb72373bc54289408ed93c328e85

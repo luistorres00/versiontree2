@@ -49,7 +49,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (logoutButton) {
       logoutButton.addEventListener("click", function () {
+<<<<<<< HEAD
         fetch("http://localhost:16082/auth/logout", {
+=======
+        fetch("http://192.168.1.87:16082/auth/logout", {
+>>>>>>> 8321d8712aaeeb72373bc54289408ed93c328e85
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -103,6 +107,7 @@ function showInstallPrompt() {
 }
 
 // Botão flutuante para instalação manual
+<<<<<<< HEAD
 window.addEventListener("beforeinstallprompt", (e) => {
   e.preventDefault();
   deferredPrompt = e;
@@ -110,6 +115,15 @@ window.addEventListener("beforeinstallprompt", (e) => {
   const installBtn = document.createElement("button");
   installBtn.id = "installPWA";
   installBtn.textContent = "📲 Instalar App";
+=======
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  
+  const installBtn = document.createElement('button');
+  installBtn.id = 'installPWA';
+  installBtn.textContent = '📲 Instalar App';
+>>>>>>> 8321d8712aaeeb72373bc54289408ed93c328e85
   installBtn.style = `
     position: fixed;
     bottom: 20px;
@@ -148,7 +162,11 @@ function login() {
     password: password,
   };
 
+<<<<<<< HEAD
   fetch("http://localhost:16082/auth/login", {
+=======
+  fetch("http://192.168.1.87:16082/auth/login", {
+>>>>>>> 8321d8712aaeeb72373bc54289408ed93c328e85
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -192,10 +210,14 @@ function playVideoAndRedirect(data) {
   function checkUserTypeAndRedirect() {
     const responseData = JSON.parse(localStorage.getItem("responseData"));
     if (responseData) {
+<<<<<<< HEAD
       if (
         responseData.usertype === "admin" ||
         responseData.usertype === "operator"
       ) {
+=======
+      if (responseData.usertype === "admin" || responseData.usertype === "operator") {
+>>>>>>> 8321d8712aaeeb72373bc54289408ed93c328e85
         window.location.href = "/admin.html";
       } else {
         window.location.href = "/cliente.html";
@@ -205,4 +227,8 @@ function playVideoAndRedirect(data) {
 
   setTimeout(checkUserTypeAndRedirect, 5000);
   video.play();
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 8321d8712aaeeb72373bc54289408ed93c328e85

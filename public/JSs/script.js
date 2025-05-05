@@ -19,7 +19,11 @@ setInterval(updateClock, 1000);
 let campoPesquisa = false;
 
 //Declarado URL's
+<<<<<<< HEAD
 const url = "http://localhost:16082/";
+=======
+const url = "http://192.168.1.87:16082/";
+>>>>>>> 8321d8712aaeeb72373bc54289408ed93c328e85
 
 //-------------------------------------------------------DOC LISTENERS--------------------------------------------------------
 
@@ -30,7 +34,11 @@ document.addEventListener("DOMContentLoaded", function () {
   const userData = JSON.parse(responseData);
   if (!responseData) {
     // Se a variável responseData não existir, redirecione o usuário para index.html
+<<<<<<< HEAD
     window.location.href = "http://localhost:5500/index.html";
+=======
+    window.location.href = "http://192.168.1.87:5500/index.html";
+>>>>>>> 8321d8712aaeeb72373bc54289408ed93c328e85
   }
 
   localStorage.setItem("usertype", userData.usertype);
@@ -560,7 +568,11 @@ document.addEventListener("DOMContentLoaded", function () {
     logoutButton.addEventListener("click", function () {
       // Fazer solicitação para logout
       console.log("1");
+<<<<<<< HEAD
       fetch("http://localhost:16082/auth/logout", {
+=======
+      fetch("http://192.168.1.87:16082/auth/logout", {
+>>>>>>> 8321d8712aaeeb72373bc54289408ed93c328e85
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -597,7 +609,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function carregarDados() {
   // Definir o IP/URL para onde enviar os dados
+<<<<<<< HEAD
   const url = "http://localhost:16082/getData";
+=======
+  const url = "http://192.168.1.87:16082/getData";
+>>>>>>> 8321d8712aaeeb72373bc54289408ed93c328e85
 
   fetch(url)
     .then((response) => response.json())
@@ -625,7 +641,11 @@ function inputRace() {
   if (rname != null) {
     document.getElementById("header").innerHTML = rname;
     // Enviar o nome da corrida para o backend
+<<<<<<< HEAD
     fetch("http://localhost:16082/addRace", {
+=======
+    fetch("http://192.168.1.87:16082/addRace", {
+>>>>>>> 8321d8712aaeeb72373bc54289408ed93c328e85
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -649,7 +669,11 @@ function inputRace() {
 
 //Muda o nome da corrida para a ultima da tabela
 function updateHeaderWithLastRaceText() {
+<<<<<<< HEAD
   fetch("http://localhost:16082/getLRace")
+=======
+  fetch("http://192.168.1.87:16082/getLRace")
+>>>>>>> 8321d8712aaeeb72373bc54289408ed93c328e85
     .then((response) => {
       if (!response.ok) {
         throw new Error("Erro ao obter o texto da última corrida");
@@ -849,7 +873,11 @@ function getData() {
     return Promise.resolve(null); // Retorna uma promessa resolvida com null se algum popup estiver aberto
   }
 
+<<<<<<< HEAD
   const url = "http://localhost:16082/getData";
+=======
+  const url = "http://192.168.1.87:16082/getData";
+>>>>>>> 8321d8712aaeeb72373bc54289408ed93c328e85
 
   return fetch(url)
     .then((response) => response.json())
@@ -1079,7 +1107,11 @@ function enviarJson() {
   console.log(localStorageData);
 
   // Definir o IP/URL para onde enviar os dados
+<<<<<<< HEAD
   const url = "http://localhost:16082/addData";
+=======
+  const url = "http://192.168.1.87:16082/addData";
+>>>>>>> 8321d8712aaeeb72373bc54289408ed93c328e85
 
   // Verificar se existem dados no localStorage
   if (localStorageData) {
@@ -1183,7 +1215,11 @@ function envUpJson() {
     // Define o ID do documento a ser atualizado (obtido do localStorage)
     const id = updatedData._id;
     // Definir o IP/URL para onde enviar os dados
+<<<<<<< HEAD
     const url = `http://localhost:16082/updateData/${id}`;
+=======
+    const url = `http://192.168.1.87:16082/updateData/${id}`;
+>>>>>>> 8321d8712aaeeb72373bc54289408ed93c328e85
     // Envia os dados atualizados para o servidor
     fetch(url, {
       method: "PUT",
@@ -1218,7 +1254,11 @@ function deleteLinha() {
   // Verifica se o ID está disponível nos detalhes
   if (detalhes && detalhes._id) {
     // Faz uma solicitação DELETE para excluir a linha com o ID especificado
+<<<<<<< HEAD
     fetch(`http://localhost:16082/dropData/${detalhes._id}`, {
+=======
+    fetch(`http://192.168.1.87:16082/dropData/${detalhes._id}`, {
+>>>>>>> 8321d8712aaeeb72373bc54289408ed93c328e85
       method: "DELETE",
     })
       .then((response) => {
@@ -1438,7 +1478,11 @@ function limparTabela() {
   }
 
   // Definir o IP/URL para onde enviar os dados
+<<<<<<< HEAD
   const url = "http://localhost:16082/dropData";
+=======
+  const url = "http://192.168.1.87:16082/dropData";
+>>>>>>> 8321d8712aaeeb72373bc54289408ed93c328e85
 
   fetch(url, {
     method: "POST",
@@ -1513,7 +1557,11 @@ function enviarJsonNumpad() {
   const localStorageData = localStorage.getItem("novoNumpadNum");
 
   // Definir o IP/URL para onde enviar os dados
+<<<<<<< HEAD
   const url = "http://localhost:16082/addDataNumpad";
+=======
+  const url = "http://192.168.1.87:16082/addDataNumpad";
+>>>>>>> 8321d8712aaeeb72373bc54289408ed93c328e85
 
   // Verificar se existem dados no localStorage
   if (localStorageData) {
@@ -1575,7 +1623,11 @@ function envUpNumpadJson() {
     // Define o ID do documento a ser atualizado (obtido do localStorage)
     const id = updatedData._id;
     // Definir o IP/URL para onde enviar os dados
+<<<<<<< HEAD
     const url = `http://localhost:16082/updateNumpad/${id}`;
+=======
+    const url = `http://192.168.1.87:16082/updateNumpad/${id}`;
+>>>>>>> 8321d8712aaeeb72373bc54289408ed93c328e85
     // Envia os dados atualizados para o servidor
     console.log(updatedData);
     fetch(url, {
@@ -1606,7 +1658,11 @@ function envUpNumpadJson() {
 // Dar reset ao numero de numpad
 function eliminarNumpadNum() {
   // Definir o IP/URL para onde enviar os dados
+<<<<<<< HEAD
   const url = "http://localhost:16082/dropDataNumpad";
+=======
+  const url = "http://192.168.1.87:16082/dropDataNumpad";
+>>>>>>> 8321d8712aaeeb72373bc54289408ed93c328e85
 
   fetch(url, {
     method: "POST",
@@ -2355,7 +2411,11 @@ function updatePosition() {
     // Define o ID do documento a ser atualizado (obtido do localStorage)
     const id = updatedData1._id;
     // Definir o IP/URL para onde enviar os dados
+<<<<<<< HEAD
     const url = `http://localhost:16082/updateData/${id}`;
+=======
+    const url = `http://192.168.1.87:16082/updateData/${id}`;
+>>>>>>> 8321d8712aaeeb72373bc54289408ed93c328e85
     // Envia os dados atualizados para o servidor
     fetch(url, {
       method: "PUT",
@@ -2385,7 +2445,11 @@ function updatePosition() {
     const id2 = updatedData2._id;
 
     // Definir o IP/URL para onde enviar os dados
+<<<<<<< HEAD
     const url2 = `http://localhost:16082/updateData/${id2}`;
+=======
+    const url2 = `http://192.168.1.87:16082/updateData/${id2}`;
+>>>>>>> 8321d8712aaeeb72373bc54289408ed93c328e85
 
     // Envia os dados atualizados para o servidor
     fetch(url2, {
@@ -2466,7 +2530,11 @@ function resetCorridas() {
 // Carregar opções para Obs
 function carregarObsOptions() {
   // Definir o IP/URL para onde enviar os dados
+<<<<<<< HEAD
   const url = "http://localhost:16082/getObsOptions";
+=======
+  const url = "http://192.168.1.87:16082/getObsOptions";
+>>>>>>> 8321d8712aaeeb72373bc54289408ed93c328e85
 
   fetch(url)
     .then((response) => response.json())
@@ -2496,7 +2564,11 @@ function enviarObsOptionJson() {
   console.log(localStorageData);
 
   // Definir o IP/URL para onde enviar os dados
+<<<<<<< HEAD
   const url = "http://localhost:16082/addObsOptions";
+=======
+  const url = "http://192.168.1.87:16082/addObsOptions";
+>>>>>>> 8321d8712aaeeb72373bc54289408ed93c328e85
 
   // Verificar se existem dados no localStorage
   if (localStorageData) {
